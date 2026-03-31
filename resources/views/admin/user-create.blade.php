@@ -48,7 +48,7 @@
 .iv-input:focus { border-color: #cbd5e0; box-shadow: 0 0 0 3px rgba(160, 174, 192, 0.1); }
 
 /* Role Cards Grid */
-.iv-role-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+.iv-role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
 @media (max-width: 1024px) { .iv-role-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .iv-role-grid { grid-template-columns: 1fr; } }
 .iv-role-card {
@@ -203,19 +203,14 @@
                     <div class="iv-role-desc">Full system access and member management.</div>
                 </div>
                 <div class="iv-role-card" onclick="selectRole(this)">
-                    <div class="iv-role-icon"><span class="material-icons-outlined">code</span></div>
-                    <div class="iv-role-name">Developer</div>
-                    <div class="iv-role-desc">API access, tech logs, and staging tools.</div>
+                    <div class="iv-role-icon"><span class="material-icons-outlined">badge</span></div>
+                    <div class="iv-role-name">Manager</div>
+                    <div class="iv-role-desc">Can manage clients, invoices, and operational workflows.</div>
                 </div>
                 <div class="iv-role-card" onclick="selectRole(this)">
                     <div class="iv-role-icon"><span class="material-icons-outlined">support_agent</span></div>
                     <div class="iv-role-name">Support</div>
-                    <div class="iv-role-desc">Client tickets and communication logs.</div>
-                </div>
-                <div class="iv-role-card" onclick="selectRole(this)">
-                    <div class="iv-role-icon"><span class="material-icons-outlined">analytics</span></div>
-                    <div class="iv-role-name">Analyst</div>
-                    <div class="iv-role-desc">Read-only reporting and performance data.</div>
+                    <div class="iv-role-desc">Read-only access to clients, subscriptions, and reports.</div>
                 </div>
             </div>
         </div>
@@ -337,9 +332,8 @@ function selectRole(element) {
     const roleName = element.querySelector('.iv-role-name').innerText.trim().toLowerCase();
     const roleMap = {
         admin: 'admin',
-        developer: 'developer',
+        manager: 'manager',
         support: 'support',
-        analyst: 'analyst',
     };
 
     document.getElementById('role_input').value = roleMap[roleName] || 'admin';

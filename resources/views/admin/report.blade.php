@@ -136,7 +136,7 @@
         <div class="rp-links">
             <a href="{{ route('admin.dashboard') }}">Dashboard</a>
             <a href="{{ route('admin.report') }}" class="active">Reports</a>
-            <a href="{{ route('admin.settings') }}">Settings</a>
+            <a href="{{ route('admin.profile.edit') }}">Profile</a>
             <a href="{{ route('contact') }}">Support</a>
         </div>
         <div class="rp-tools">

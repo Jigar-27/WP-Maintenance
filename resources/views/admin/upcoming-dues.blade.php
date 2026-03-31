@@ -176,8 +176,40 @@
 
 /* Dates & Actions */
 .ud-date { font-size: 0.875rem; color: #4a5568; line-height: 1.4; font-weight: 600; }
-.ud-action-dot { color: #a0aec0; text-decoration: none; display: inline-flex; transition: color 0.2s; cursor: pointer; }
+.ud-action-dot { color: #a0aec0; text-decoration: none; display: inline-flex; transition: color 0.2s; cursor: pointer; border: none; background: transparent; padding: 0; }
 .ud-action-dot:hover { color: #2d3748; }
+.ud-actions-menu-wrap { position: relative; display: inline-flex; }
+.ud-row-menu {
+    position: absolute;
+    top: 1.55rem;
+    right: 0;
+    min-width: 180px;
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    display: none;
+    z-index: 30;
+    padding: 0.3rem 0;
+}
+.ud-row-menu.open { display: block; }
+.ud-row-menu-item {
+    width: 100%;
+    display: block;
+    border: none;
+    background: transparent;
+    text-align: left;
+    text-decoration: none;
+    color: #4a5568;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+}
+.ud-row-menu-item:hover {
+    background: #f8fafc;
+    color: #1a202c;
+}
 
 /* Pagination Area */
 .ud-footer-area {
@@ -329,9 +361,24 @@
                         <div class="ud-date">{{ $due->end_date->format('M d,') }}<br>{{ $due->end_date->format('Y') }}</div>
                     </td>
                     <td>
-                        <a href="{{ route('admin.subscriptions.edit', $due->id) }}" class="ud-action-dot">
-                            <span class="material-icons-outlined">more_horiz</span>
-                        </a>
+                        @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'manager']))
+                            <div class="ud-actions-menu-wrap">
+                                <button type="button" class="ud-action-dot ud-action-trigger" aria-label="More actions" aria-expanded="false">
+                                    <span class="material-icons-outlined">more_horiz</span>
+                                </button>
+                                <div class="ud-row-menu">
+                                    <form action="{{ route('admin.dues.send-reminder', $due->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="ud-row-menu-item">Send Reminder Email</button>
+                                    </form>
+                                    @if(auth()->user()->isAdmin())
+                                        <a href="{{ route('admin.subscriptions.edit', $due->id) }}" class="ud-row-menu-item">Edit Subscription</a>
+                                    @endif
+                                </div>
+                            </div>
+                        @else
+                            <span style="color:#cbd5e1;">—</span>
+                        @endif
                     </td>
                 </tr>
                 @empty
@@ -373,3 +420,45 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    function closeUpcomingDueMenus(exceptMenu) {
+        document.querySelectorAll('.ud-row-menu.open').forEach(function (menu) {
+            if (menu !== exceptMenu) {
+                menu.classList.remove('open');
+                const trigger = menu.closest('.ud-actions-menu-wrap')?.querySelector('.ud-action-trigger');
+                if (trigger) {
+                    trigger.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    }
+
+    document.addEventListener('click', function (event) {
+        const trigger = event.target.closest('.ud-action-trigger');
+        if (trigger) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const wrap = trigger.closest('.ud-actions-menu-wrap');
+            if (!wrap) return;
+
+            const menu = wrap.querySelector('.ud-row-menu');
+            if (!menu) return;
+
+            const shouldOpen = !menu.classList.contains('open');
+            closeUpcomingDueMenus(menu);
+            menu.classList.toggle('open', shouldOpen);
+            trigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+            return;
+        }
+
+        if (!event.target.closest('.ud-actions-menu-wrap')) {
+            closeUpcomingDueMenus();
+        }
+    });
+})();
+</script>
+@endpush

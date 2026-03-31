@@ -51,11 +51,38 @@ p { line-height: 1.6; margin: 0; }
 .fb-text-top { font-size: 0.625rem; color: var(--lp-text-light); text-transform: uppercase; font-weight: 700; }
 .fb-text-bot { font-size: 0.8125rem; font-weight: 800; color: var(--lp-dark); }
 
-/* 2. Logos */
-.logos-sec { background: #f8fafc; padding: 3rem 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; text-align: center; }
-.logos-title { font-size: 0.6875rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
-.logos-grid { display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; opacity: 0.6; }
-.logo-item { display: flex; align-items: center; gap: 8px; font-size: 1.25rem; font-weight: 800; color: var(--lp-text-light); }
+/* 2. Infrastructure Strip */
+.logos-sec {
+    background: #dfe7f8;
+    padding: 2.8rem 0 2.6rem;
+    border-top: 1px solid #d5def2;
+    border-bottom: 1px solid #d5def2;
+    text-align: center;
+}
+.logos-title {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    margin-bottom: 1.4rem;
+}
+.logos-grid {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+.logo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #6b7280;
+}
+.logo-item span { font-size: 1.3rem; color: #8a93a5; }
+.logo-item strong { font-size: 1.75rem; font-weight: 700; letter-spacing: 0.01em; }
 
 /* 3. Pricing */
 .pricing-sec { padding: 6rem 0; text-align: center; }
@@ -82,20 +109,122 @@ p { line-height: 1.6; margin: 0; }
 .btn-pop:hover { background: var(--lp-primary-hover); border-color: var(--lp-primary-hover); }
 .pr-link { display: block; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--lp-text-light); margin-top: 1rem; text-decoration: none; }
 
-/* 4. Stats Band */
-.stats-sec { background: var(--lp-bg-blue); padding: 5rem 0; text-align: center; }
-.stats-flex { display: flex; justify-content: center; gap: 6rem; margin-bottom: 3rem; }
-.stat-item { display: flex; flex-direction: column; align-items: center; }
-.stat-icon { color: var(--lp-primary); font-size: 1.5rem; margin-bottom: 0.5rem; }
-.stat-num { font-size: 2rem; font-weight: 800; color: var(--lp-dark); margin-bottom: 0.25rem; }
-.stat-label { font-size: 0.8125rem; font-weight: 700; color: var(--lp-text-light); text-transform: uppercase; letter-spacing: 0.05em; }
+/* 4. Trust + Stats Band */
+.stats-sec { background: #f0f4ff; padding: 4.5rem 0 4.8rem; text-align: center; }
+.trusted-tools { margin-bottom: 2.8rem; }
+.trusted-title {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    margin-bottom: 1.1rem;
+}
+.trusted-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+}
+.trusted-item {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #9ca3af;
+}
 
-.stats-card { background: white; border-radius: 12px; padding: 1.5rem 2rem; display: inline-block; box-shadow: 0 4px 20px rgba(0,0,0,0.03); text-align: center; }
-.sc-top { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: #15803d; font-size: 0.875rem; margin-bottom: 1rem; }
-.sc-top span { background: #dcfce7; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-.sc-divider { height: 1px; background: #f1f5f9; width: 100%; margin-bottom: 1rem; }
-.sc-bot { font-size: 0.75rem; font-weight: 600; color: var(--lp-text-light); margin-bottom: 0.75rem; display: block;}
-.sc-logos { display: flex; justify-content: center; gap: 1rem; opacity: 0.5; font-size: 0.75rem; font-weight: 800; }
+.stats-flex {
+    background: #dfe7f8;
+    border: 1px solid #d3def5;
+    border-radius: 1.8rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 3.2rem;
+    overflow: hidden;
+}
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem 1.8rem;
+    border-right: 1px solid #cfdaef;
+}
+.stat-item:last-child { border-right: none; }
+.stat-icon { font-size: 1.2rem; margin-bottom: 0.45rem; color: #c2410c; }
+.stat-item:nth-child(2) .stat-icon { color: #4d5e86; }
+.stat-num { font-size: 2.55rem; font-weight: 800; color: var(--lp-dark); margin-bottom: 0.15rem; line-height: 1; }
+.stat-label { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em; }
+
+.stats-card {
+    background: #ffffff;
+    border-radius: 2rem;
+    border: 1px solid #e7ecf7;
+    width: min(100%, 640px);
+    margin: 0 auto;
+    padding: 2.1rem 2.3rem 2.25rem;
+    box-shadow: 0 18px 40px rgba(77, 94, 134, 0.07);
+    text-align: center;
+}
+.sc-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #e7f7ee;
+    color: #0f172a;
+    border: 1px solid #d3efdf;
+    border-radius: 999px;
+    padding: 0.68rem 1.2rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.55rem;
+}
+.sc-top .material-icons-outlined { font-size: 1.05rem; color: #16a34a; }
+.sc-bot {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: #a8a29e;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    margin-bottom: 0.85rem;
+    display: block;
+}
+.sc-partner-logo {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #273956;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.25rem;
+}
+.sc-divider { height: 1px; background: #eceff6; width: 100%; margin: 0 auto 1.25rem; }
+.sc-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    color: #9ca3af;
+}
+.sc-pay-chip {
+    border: 1px solid #eceff6;
+    border-radius: 0.45rem;
+    padding: 0.28rem 0.52rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #6b7280;
+}
+.sc-more {
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #8b8c90;
+}
+
+@media (max-width: 900px) {
+    .stats-flex { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 1px solid #cfdaef; }
+    .stat-item:last-child { border-bottom: none; }
+}
 
 /* 5. FAQ */
 .faq-sec { padding: 6rem 0; }
@@ -163,12 +292,12 @@ p { line-height: 1.6; margin: 0; }
     {{-- 2. Logos --}}
     <section class="logos-sec">
         <div class="lp-container">
-            <div class="logos-title">Trusted by 500+ forward-thinking brands</div>
+            <div class="logos-title">Powered by Global Infrastructure</div>
             <div class="logos-grid">
-                <div class="logo-item"><span class="material-icons-outlined">cloud</span> Google Cloud</div>
-                <div class="logo-item"><span class="material-icons-outlined">dns</span> AWS</div>
-                <div class="logo-item"><span class="material-icons-outlined">security</span> Cloudflare</div>
-                <div class="logo-item"><span class="material-icons-outlined">settings_applications</span> cPanel</div>
+                <div class="logo-item"><span class="material-icons-outlined">cloud</span><strong>Google Cloud</strong></div>
+                <div class="logo-item"><span class="material-icons-outlined">radio_button_unchecked</span><strong>AWS</strong></div>
+                <div class="logo-item"><span class="material-icons-outlined">cloud_queue</span><strong>Cloudflare</strong></div>
+                <div class="logo-item"><span class="material-icons-outlined">verified_user</span><strong>PCI DSS</strong></div>
             </div>
         </div>
     </section>
@@ -213,19 +342,30 @@ p { line-height: 1.6; margin: 0; }
     {{-- 4. Stats --}}
     <section class="stats-sec">
         <div class="lp-container">
+            <div class="trusted-tools">
+                <div class="trusted-title">Trusted by agencies using</div>
+                <div class="trusted-grid">
+                    <div class="trusted-item">Elementor</div>
+                    <div class="trusted-item">Divi</div>
+                    <div class="trusted-item">Beaver Builder</div>
+                    <div class="trusted-item">WPBakery</div>
+                    <div class="trusted-item">Oxygen</div>
+                </div>
+            </div>
+
             <div class="stats-flex">
                 <div class="stat-item">
-                    <span class="material-icons-outlined stat-icon">moving</span>
+                    <span class="material-icons-outlined stat-icon">speed</span>
                     <div class="stat-num">99.9%</div>
-                    <div class="stat-label">Uptime Guarantee</div>
+                    <div class="stat-label">Uptime Maintained</div>
                 </div>
                 <div class="stat-item">
-                    <span class="material-icons-outlined stat-icon">security</span>
+                    <span class="material-icons-outlined stat-icon">verified_user</span>
                     <div class="stat-num">15,000+</div>
                     <div class="stat-label">Threats Blocked</div>
                 </div>
                 <div class="stat-item">
-                    <span class="material-icons-outlined stat-icon">flash_on</span>
+                    <span class="material-icons-outlined stat-icon">bolt</span>
                     <div class="stat-num">&lt;2hr</div>
                     <div class="stat-label">Response Time</div>
                 </div>
@@ -233,13 +373,16 @@ p { line-height: 1.6; margin: 0; }
             
             <div class="stats-card">
                 <div class="sc-top">
-                    <span><i class="material-icons-outlined" style="font-size:14px; font-weight:800;">check</i></span> 
-                    All included! No hidden cost!
+                    <span class="material-icons-outlined">verified</span>
+                    Secure Encrypted Checkout
                 </div>
+                <span class="sc-bot">Trusted Payment Partner</span>
+                <div class="sc-partner-logo">Razorpay</div>
                 <div class="sc-divider"></div>
-                <span class="sc-bot">Powered by the best in the industry:</span>
                 <div class="sc-logos">
-                    <span>AWS</span> | <span>CLOUDFLARE</span> | <span>CPANEL</span>
+                    <span class="sc-pay-chip">VISA</span>
+                    <span class="sc-pay-chip">MC</span>
+                    <span class="sc-more">&amp; MORE</span>
                 </div>
             </div>
         </div>

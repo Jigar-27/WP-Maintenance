@@ -32,10 +32,8 @@
                 <label class="form-label" for="role">Role *</label>
                 <select class="form-select" id="role" name="role" required>
                     <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="developer" {{ old('role', $user->role) === 'developer' ? 'selected' : '' }}>Developer</option>
+                    <option value="manager" {{ old('role', $user->role) === 'manager' ? 'selected' : '' }}>Manager</option>
                     <option value="support" {{ old('role', $user->role) === 'support' ? 'selected' : '' }}>Support</option>
-                    <option value="analyst" {{ old('role', $user->role) === 'analyst' ? 'selected' : '' }}>Analyst</option>
-                    <option value="client" {{ old('role', $user->role) === 'client' ? 'selected' : '' }}>Client</option>
                 </select>
                 @error('role') <div class="form-error">{{ $message }}</div> @enderror
             </div>

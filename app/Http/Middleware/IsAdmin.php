@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,11 +20,11 @@ class IsAdmin
             return redirect()->route('admin.login');
         }
 
-        if (in_array((string) \Illuminate\Support\Facades\Auth::user()->role, ['admin', 'developer', 'support', 'analyst'], true)) {
+        if (\Illuminate\Support\Facades\Auth::user()->hasAnyRole(User::STAFF_ROLES)) {
             return $next($request);
         }
 
-        if ((string) \Illuminate\Support\Facades\Auth::user()->role === 'client') {
+        if (\Illuminate\Support\Facades\Auth::user()->isClient()) {
             return redirect()->route('client.dashboard');
         }
 

@@ -5,123 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') — Agency Console</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23FF5722'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Inter,sans-serif' font-weight='800' font-size='18'>W</text></svg>">
-    <style>
-        .yajra-dt-bottom .dataTables_length,
-        .yajra-dt-bottom .dataTables_paginate {
-            float: none !important;
-            margin: 0 !important;
-        }
-        .yajra-dt-bottom .dataTables_length {
-            display: flex;
-            align-items: center;
-            min-height: 34px;
-            margin-left: 1.5rem !important;
-        }
-        .yajra-dt-bottom .dataTables_length label {
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
-            font-size: 0.8125rem;
-            font-weight: 700;
-            color: #334155;
-            margin: 0 !important;
-            line-height: 34px;
-            white-space: nowrap;
-        }
-        .yajra-dt-bottom .dataTables_length select {
-            border: 1px solid transparent !important;
-            border-radius: 999px !important;
-            background: #f1f3f9 !important;
-            color: #334155 !important;
-            padding: 0.34rem 1.9rem 0.34rem 0.7rem !important;
-            margin: 0 !important;
-            font-size: 0.8125rem !important;
-            font-weight: 700 !important;
-            min-height: 34px;
-            min-width: 72px;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.8rem center;
-            background-size: 18px 18px;
-            cursor: pointer;
-            vertical-align: middle;
-            line-height: 1;
-        }
-        .yajra-dt-bottom .dataTables_paginate {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-        .yajra-dt-bottom .dataTables_paginate .paginate_button {
-            display: inline-flex !important;
-            align-items: center;
-            justify-content: center;
-            min-width: 34px;
-            height: 34px;
-            border: 1px solid #dbe3f0 !important;
-            border-radius: 999px !important;
-            padding: 0 0.6rem !important;
-            margin: 0 !important;
-            color: #334155 !important;
-            background: #f1f3f9 !important;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-decoration: none !important;
-            line-height: 1 !important;
-        }
-        .yajra-dt-bottom .dataTables_paginate .paginate_button.previous,
-        .yajra-dt-bottom .dataTables_paginate .paginate_button.next {
-            min-width: 72px;
-            color: #b02f00 !important;
-            border-color: #f3d3c9 !important;
-            background: #fff7f3 !important;
-        }
-        .yajra-dt-bottom .dataTables_paginate .paginate_button:hover {
-            border-color: #c6d2e4 !important;
-            background: #e9eef8 !important;
-            color: #1f2937 !important;
-        }
-        .yajra-dt-bottom .dataTables_paginate .paginate_button.current,
-        .yajra-dt-bottom .dataTables_paginate .paginate_button.current:hover {
-            background: #b02f00 !important;
-            border-color: #b02f00 !important;
-            color: #fff !important;
-        }
-        .yajra-dt-bottom .dataTables_paginate .paginate_button.disabled,
-        .yajra-dt-bottom .dataTables_paginate .paginate_button.disabled:hover {
-            opacity: 0.45;
-            cursor: default !important;
-            pointer-events: none;
-            border-color: #e2e8f0 !important;
-            color: #94a3b8 !important;
-            background: #f8fafc !important;
-        }
-        .yajra-table-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-        .yajra-dt-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            gap: 0.75rem;
-            padding-top: 0.5rem;
-            min-height: 34px;
-        }
-        @media (max-width: 768px) {
-            .yajra-dt-bottom {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
+    @stack('stylesheets')
     @stack('styles')
 </head>
 <body>
@@ -146,12 +32,14 @@
                         Subscriptions
                     </a>
                 </li>
+                @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'manager']))
                 <li>
                     <a href="{{ route('admin.invoices') }}" class="sidebar-link {{ request()->routeIs('admin.invoices*') ? 'active' : '' }}">
                         <span class="material-icons-outlined">library_books</span>
                         All Invoices
                     </a>
                 </li>
+                @endif
                 <li>
                     <a href="{{ route('admin.users') }}" class="sidebar-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                         <span class="material-icons-outlined">people</span>
@@ -170,12 +58,6 @@
                         Upcoming Dues
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('admin.settings') }}" class="sidebar-link {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
-                        <span class="material-icons-outlined">settings</span>
-                        Settings
-                    </a>
-                </li>
             </ul>
 
             <div class="sidebar-footer">
@@ -190,10 +72,12 @@
                     </div>
                 </div>
                 
-                <a href="{{ route('admin.users.create') }}" class="btn-sidebar-add">
-                    <span class="material-icons-outlined" style="font-size: 1.125rem;">add</span>
-                    Add New User
-                </a>
+                @if(auth()->check() && auth()->user()->isAdmin())
+                    <a href="{{ route('admin.users.create') }}" class="btn-sidebar-add">
+                        <span class="material-icons-outlined" style="font-size: 1.125rem;">add</span>
+                        Add New User
+                    </a>
+                @endif
             </div>
         </aside>
 
@@ -223,19 +107,19 @@
                     </div>
                 </form>
                 <div class="admin-top-actions">
-                    @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'developer'], true))
-                    <span class="material-icons-outlined admin-icon-btn">notifications</span>
+                    @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'manager']))
+                        <span class="material-icons-outlined admin-icon-btn">notifications</span>
                     @endif
                     <div class="admin-top-divider"></div>
                     <div class="admin-user">
                         <div class="admin-user-info">
                             <div class="admin-user-name">{{ auth()->user()->name ?? 'Agency Admin' }}</div>
-                            <div class="admin-user-role">Account Manager</div>
+                            <div class="admin-user-role">{{ strtoupper((string) (auth()->user()->role ?? 'admin')) }}</div>
                         </div>
                         <!-- Avatar -->
-                        <div class="admin-user-avatar">
+                        <a href="{{ route('admin.profile.edit') }}" class="admin-user-avatar" title="Edit Profile">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Agency Admin') }}&background=2e8b57&color=fff" alt="Avatar">
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

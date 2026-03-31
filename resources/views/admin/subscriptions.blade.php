@@ -215,6 +215,9 @@
 @endpush
 
 @section('content')
+@php
+    $isAdminUser = auth()->check() && auth()->user()->isAdmin();
+@endphp
 <div class="subs-container">
     {{-- Main Header --}}
     <div class="subs-header-area">
@@ -222,10 +225,12 @@
             <h1 class="subs-header-title">Subscriptions Management</h1>
             <p class="subs-header-sub">Admin Hub for managing client plan tiers, pricing, and lifecycle status.</p>
         </div>
-        <a href="{{ route('admin.subscriptions.create') }}" class="btn-red-add">
-            <span class="material-icons-outlined" style="font-size: 1.25rem;">add</span>
-            Add Subscription
-        </a>
+        @if($isAdminUser)
+            <a href="{{ route('admin.subscriptions.create') }}" class="btn-red-add">
+                <span class="material-icons-outlined" style="font-size: 1.25rem;">add</span>
+                Add Subscription
+            </a>
+        @endif
     </div>
 
     {{-- Plan Analytics Cards --}}
@@ -244,9 +249,11 @@
             <div class="plan-card-label">Active Subscriptions</div>
             <div class="plan-card-number">{{ $plan->subscriptions_count ?? 0 }}</div>
             
-            <a href="{{ route('admin.plans.edit', $plan->id) }}" class="plan-edit-link">
-                <span class="material-icons-outlined" style="font-size: 0.875rem;">edit</span> Edit Plan
-            </a>
+            @if($isAdminUser)
+                <a href="{{ route('admin.plans.edit', $plan->id) }}" class="plan-edit-link">
+                    <span class="material-icons-outlined" style="font-size: 0.875rem;">edit</span> Edit Plan
+                </a>
+            @endif
             
             <div class="plan-card-line"></div>
         </div>
@@ -260,7 +267,7 @@
                 <div class="plan-card-bestfor">Best For: Template use case</div>
                 <div class="plan-card-label">Active Subscriptions</div>
                 <div class="plan-card-number">0</div>
-                @if($plans->isNotEmpty())
+                @if($isAdminUser && $plans->isNotEmpty())
                     <a href="{{ route('admin.plans.edit', $plans->first()->id) }}" class="plan-edit-link"><span class="material-icons-outlined" style="font-size: 0.875rem;">edit</span> Edit Plan</a>
                 @else
                     <span class="plan-edit-link" style="opacity: .5; cursor: not-allowed;"><span class="material-icons-outlined" style="font-size: 0.875rem;">edit</span> Edit Plan</span>

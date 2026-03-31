@@ -146,14 +146,11 @@
             </form>
 
             <div class="client-nav-actions">
-                @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'developer'], true))
-                <span class="material-icons-outlined client-icon-btn">notifications</span>
-                @endif
                 <div class="client-top-divider"></div>
                 <div class="client-user">
                     <div class="client-user-info">
-                        <div class="client-user-name">{{ auth()->user()->name ?? 'Agency Admin' }}</div>
-                        <div class="client-user-role">Account Manager</div>
+                        <div class="client-user-name">{{ auth()->user()->name ?? 'Client User' }}</div>
+                        <div class="client-user-role">Client</div>
                     </div>
                     <div class="client-user-avatar">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'User') }}&background=2e8b57&color=fff" alt="Avatar">
@@ -170,9 +167,6 @@
 
         <nav class="client-tabs">
             <a href="{{ route('client.dashboard') }}" class="client-tab-link {{ request()->routeIs('client.dashboard') ? 'active' : '' }}">Dashboard</a>
-            <a href="{{ route('client.reports') }}" class="client-tab-link {{ request()->routeIs('client.reports') ? 'active' : '' }}">Reports</a>
-            <a href="{{ route('client.settings') }}" class="client-tab-link {{ request()->routeIs('client.settings') ? 'active' : '' }}">Settings</a>
-            <a href="{{ route('client.support') }}" class="client-tab-link {{ request()->routeIs('client.support') ? 'active' : '' }}">Support</a>
         </nav>
 
         <main class="client-main">

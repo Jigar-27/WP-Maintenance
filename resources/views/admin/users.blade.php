@@ -205,10 +205,8 @@
     display: inline-block;
 }
 .rb-admin { background: #fee2e2; color: #b91c1c; }
-.rb-developer { background: #e0e7ff; color: #4338ca; }
+.rb-manager { background: #e0e7ff; color: #4338ca; }
 .rb-support { background: #fef3c7; color: #b45309; }
-.rb-analyst { background: #ecfeff; color: #0e7490; }
-.rb-client { background: #ede9fe; color: #5b21b6; }
 
 /* Status */
 .um-status {
@@ -259,9 +257,11 @@
             <h1 class="um-title">Users Management</h1>
         </div>
         <div>
-            <a href="{{ route('admin.users.create') }}" class="um-add-btn">
-                <span class="material-icons-outlined" style="font-size: 1.125rem;">person_add</span> Add New User
-            </a>
+            @if(auth()->check() && auth()->user()->isAdmin())
+                <a href="{{ route('admin.users.create') }}" class="um-add-btn">
+                    <span class="material-icons-outlined" style="font-size: 1.125rem;">person_add</span> Add New User
+                </a>
+            @endif
         </div>
     </div>
 
@@ -284,18 +284,13 @@
             </div>
             <div class="um-stat-div"></div>
             <div class="um-stat-block">
-                <div class="um-stat-num">{{ $developers }}</div>
-                <div class="um-stat-label">Developers</div>
+                <div class="um-stat-num">{{ $managers }}</div>
+                <div class="um-stat-label">Managers</div>
             </div>
             <div class="um-stat-div"></div>
             <div class="um-stat-block">
                 <div class="um-stat-num">{{ $support }}</div>
                 <div class="um-stat-label">Support</div>
-            </div>
-            <div class="um-stat-div"></div>
-            <div class="um-stat-block">
-                <div class="um-stat-num">{{ $analysts }}</div>
-                <div class="um-stat-label">Analysts</div>
             </div>
         </div>
     </div>
@@ -319,7 +314,9 @@
                     <span class="material-icons-outlined" style="font-size:1.25rem;">more_vert</span>
                 </button>
                 <div class="um-team-menu" id="um-team-menu">
-                    <a href="{{ route('admin.users.create') }}">Add New User</a>
+                    @if(auth()->check() && auth()->user()->isAdmin())
+                        <a href="{{ route('admin.users.create') }}">Add New User</a>
+                    @endif
                     <a href="{{ route('admin.users') }}">Reset Filters</a>
                 </div>
             </div>
@@ -345,13 +342,11 @@
 
                     $roleMap = [
                         'admin' => ['class' => 'rb-admin', 'text' => 'ADMIN'],
-                        'developer' => ['class' => 'rb-developer', 'text' => 'DEVELOPER'],
+                        'manager' => ['class' => 'rb-manager', 'text' => 'MANAGER'],
                         'support' => ['class' => 'rb-support', 'text' => 'SUPPORT'],
-                        'analyst' => ['class' => 'rb-analyst', 'text' => 'ANALYST'],
-                        'client' => ['class' => 'rb-client', 'text' => 'CLIENT'],
                     ];
-                    $roleClass = $roleMap[$roleLabel]['class'] ?? 'rb-client';
-                    $roleText = $roleMap[$roleLabel]['text'] ?? strtoupper($roleLabel ?: 'CLIENT');
+                    $roleClass = $roleMap[$roleLabel]['class'] ?? 'rb-support';
+                    $roleText = $roleMap[$roleLabel]['text'] ?? strtoupper($roleLabel ?: 'SUPPORT');
                     $statusClass = $isActive ? 'st-active' : 'st-inactive';
                     $statusText = $isActive ? 'Active' : 'Inactive';
                     
@@ -381,9 +376,13 @@
                         <div class="um-login-ip">{{ $ipAddr }}</div>
                     </td>
                     <td>
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="um-action-btn" title="Edit user">
-                            <span class="material-icons-outlined" style="font-size:1.125rem;">edit</span>
-                        </a>
+                        @if(auth()->check() && auth()->user()->isAdmin())
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="um-action-btn" title="Edit user">
+                                <span class="material-icons-outlined" style="font-size:1.125rem;">edit</span>
+                            </a>
+                        @else
+                            <span style="color:#cbd5e1;">—</span>
+                        @endif
                     </td>
                 </tr>
                 @empty

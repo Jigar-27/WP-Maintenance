@@ -7,20 +7,24 @@ use App\Models\Client;
 use App\Models\Subscription;
 use App\Models\Invoice;
 use App\Models\Plan;
+use App\Models\ReminderLog;
 use App\Models\User;
+use App\Mail\SubscriptionReminder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Throwable;
 
 class AdminController extends Controller
 {
     public function login()
     {
         if (Auth::check()) {
-            if (in_array(Auth::user()->role, ['admin', 'developer', 'support', 'analyst'], true)) {
+            if (Auth::user()->isStaff()) {
                 return redirect()->route('admin.dashboard');
             }
             return redirect()->route('client.dashboard');
@@ -37,7 +41,7 @@ class AdminController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            if (in_array(Auth::user()->role, ['admin', 'developer', 'support', 'analyst'], true)) {
+            if (Auth::user()->isStaff()) {
                 return redirect()->route('admin.dashboard');
             }
             return redirect()->route('client.dashboard');
@@ -58,10 +62,10 @@ class AdminController extends Controller
 
     public function dashboard(Request $request)
     {
-        // For visual exactness with the screenshot, we'll calculate these but also provide the screenshot values if data is thin
-        $totalSubscriptions = Subscription::where('status', 'active')->count() ?: 142;
+        // KPI cards
+        $totalSubscriptions = Subscription::where('status', 'active')->count();
         $totalRevenue = 168400; // Total Revenue as per screenshot
-        $totalClients = Client::where('status', 'active')->count() ?: 89;
+        $totalClients = Client::count();
         $subscriptionGrowth = 12; // As per screenshot green trending
 
         $recentSubscriptions = Subscription::with(['client', 'plan'])
@@ -497,6 +501,50 @@ class AdminController extends Controller
         ));
     }
 
+    public function sendUpcomingDueReminder($id)
+    {
+        $subscription = Subscription::with(['client', 'plan'])->findOrFail($id);
+        $email = $subscription->client?->email;
+
+        if (!$email) {
+            return back()->with('error', 'Unable to send reminder: client email is missing.');
+        }
+
+        $daysUntilExpiry = (int) $subscription->days_until_expiry;
+        $flagColumn = match (true) {
+            $daysUntilExpiry <= 0 => 'reminder_0_sent',
+            $daysUntilExpiry <= 5 => 'reminder_5_sent',
+            $daysUntilExpiry <= 10 => 'reminder_10_sent',
+            default => 'reminder_15_sent',
+        };
+
+        try {
+            Mail::to($email)->send(new SubscriptionReminder($subscription, $daysUntilExpiry));
+            $subscription->update([$flagColumn => true]);
+
+            ReminderLog::create([
+                'subscription_id' => $subscription->id,
+                'client_id' => $subscription->client_id,
+                'days_before_expiry' => $daysUntilExpiry,
+                'email_sent_to' => $email,
+                'status' => 'sent',
+            ]);
+
+            return back()->with('success', 'Reminder email sent to ' . $email . '.');
+        } catch (Throwable $e) {
+            ReminderLog::create([
+                'subscription_id' => $subscription->id,
+                'client_id' => $subscription->client_id,
+                'days_before_expiry' => $daysUntilExpiry,
+                'email_sent_to' => $email,
+                'status' => 'failed',
+            ]);
+
+            report($e);
+            return back()->with('error', 'Failed to send reminder email. Please try again.');
+        }
+    }
+
     public function users(\Illuminate\Http\Request $request)
     {
         $search = $request->query('search');
@@ -512,11 +560,10 @@ class AdminController extends Controller
         $users = $query->get();
         $totalUsers = User::where('role', '!=', 'client')->count();
         $admins = User::where('role', 'admin')->count();
-        $developers = User::where('role', 'developer')->count();
+        $managers = User::where('role', 'manager')->count();
         $support = User::where('role', 'support')->count();
-        $analysts = User::where('role', 'analyst')->count();
 
-        return view('admin.users', compact('users', 'totalUsers', 'admins', 'developers', 'support', 'analysts', 'search'));
+        return view('admin.users', compact('users', 'totalUsers', 'admins', 'managers', 'support', 'search'));
     }
 
     public function userCreate()
@@ -530,7 +577,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:admin,developer,support,analyst,client',
+            'role' => 'required|string|in:admin,manager,support',
         ]);
 
         User::create([
@@ -557,7 +604,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
-            'role' => 'required|string|in:admin,developer,support,analyst,client',
+            'role' => 'required|string|in:admin,manager,support',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -617,8 +664,33 @@ class AdminController extends Controller
         return view('admin.invoice-detail', compact('invoice'));
     }
 
-    public function settings()
+    public function profileEdit()
     {
-        return view('admin.settings');
+        $user = Auth::user();
+        return view('admin.profile-edit', compact('user'));
+    }
+
+    public function profileUpdate(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $payload = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $payload['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($payload);
+
+        return redirect()->route('admin.profile.edit')->with('success', 'Profile updated successfully.');
     }
 }

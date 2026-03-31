@@ -25,10 +25,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Agency Developer',
-            'email' => 'developer@wpmaintenance.com',
+            'name' => 'Agency Manager',
+            'email' => 'manager@wpmaintenance.com',
             'password' => Hash::make('password'),
-            'role' => 'developer',
+            'role' => 'manager',
             'email_verified_at' => now(),
         ]);
 
@@ -37,14 +37,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'support@wpmaintenance.com',
             'password' => Hash::make('password'),
             'role' => 'support',
-            'email_verified_at' => now(),
-        ]);
-
-        User::create([
-            'name' => 'Agency Analyst',
-            'email' => 'analyst@wpmaintenance.com',
-            'password' => Hash::make('password'),
-            'role' => 'analyst',
             'email_verified_at' => now(),
         ]);
 

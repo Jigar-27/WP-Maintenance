@@ -16,9 +16,6 @@ Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 Route::middleware(['auth', \App\Http\Middleware\IsClient::class])->prefix('client')->group(function () {
     Route::get('/', fn() => redirect()->route('client.dashboard'));
     Route::get('/dashboard', [ClientController::class, 'dashboard'])->name('client.dashboard');
-    Route::get('/reports', [ClientController::class, 'reports'])->name('client.reports');
-    Route::get('/settings', [ClientController::class, 'settings'])->name('client.settings');
-    Route::get('/support', [ClientController::class, 'support'])->name('client.support');
 });
 
 // ─── Frontend Routes ────────────────────────────────────────
@@ -51,33 +48,41 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/clients', [AdminController::class, 'clients'])->name('admin.clients');
         Route::get('/clients/{id}', [AdminController::class, 'clientShow'])->name('admin.clients.show');
-        Route::get('/clients/{id}/edit', [AdminController::class, 'clientEdit'])->name('admin.clients.edit');
-        Route::put('/clients/{id}', [AdminController::class, 'clientUpdate'])->name('admin.clients.update');
-        Route::patch('/clients/{id}/suspend', [AdminController::class, 'clientSuspend'])->name('admin.clients.suspend');
-        Route::delete('/clients/{id}', [AdminController::class, 'clientDelete'])->name('admin.clients.delete');
-        
+
         Route::get('/report', [AdminController::class, 'report'])->name('admin.report');
 
         Route::get('/subscriptions', [AdminController::class, 'subscriptions'])->name('admin.subscriptions');
-        Route::get('/subscriptions/create', [AdminController::class, 'subscriptionCreate'])->name('admin.subscriptions.create');
-        Route::post('/subscriptions', [AdminController::class, 'subscriptionStore'])->name('admin.subscriptions.store');
-        Route::get('/subscriptions/{id}/edit', [AdminController::class, 'subscriptionEdit'])->name('admin.subscriptions.edit');
-        Route::put('/subscriptions/{id}', [AdminController::class, 'subscriptionUpdate'])->name('admin.subscriptions.update');
-        Route::get('/plans/{id}/edit', [AdminController::class, 'planEdit'])->name('admin.plans.edit');
-        Route::put('/plans/{id}', [AdminController::class, 'planUpdate'])->name('admin.plans.update');
-
         Route::get('/upcoming-dues', [AdminController::class, 'upcomingDues'])->name('admin.dues');
 
         Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-        Route::get('/users/create', [AdminController::class, 'userCreate'])->name('admin.users.create');
-        Route::post('/users', [AdminController::class, 'userStore'])->name('admin.users.store');
-        Route::get('/users/{id}/edit', [AdminController::class, 'userEdit'])->name('admin.users.edit');
-        Route::put('/users/{id}', [AdminController::class, 'userUpdate'])->name('admin.users.update');
-        Route::delete('/users/{id}', [AdminController::class, 'userDelete'])->name('admin.users.delete');
+        Route::get('/profile', [AdminController::class, 'profileEdit'])->name('admin.profile.edit');
+        Route::put('/profile', [AdminController::class, 'profileUpdate'])->name('admin.profile.update');
 
-        Route::get('/invoices', [AdminController::class, 'invoices'])->name('admin.invoices');
-        Route::get('/invoices/{id}', [AdminController::class, 'invoiceShow'])->name('admin.invoices.show');
+        Route::middleware('role:admin,manager')->group(function () {
+            Route::get('/clients/{id}/edit', [AdminController::class, 'clientEdit'])->name('admin.clients.edit');
+            Route::put('/clients/{id}', [AdminController::class, 'clientUpdate'])->name('admin.clients.update');
+            Route::patch('/clients/{id}/suspend', [AdminController::class, 'clientSuspend'])->name('admin.clients.suspend');
+            Route::post('/upcoming-dues/{id}/send-reminder', [AdminController::class, 'sendUpcomingDueReminder'])->name('admin.dues.send-reminder');
 
-        Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+            Route::get('/invoices', [AdminController::class, 'invoices'])->name('admin.invoices');
+            Route::get('/invoices/{id}', [AdminController::class, 'invoiceShow'])->name('admin.invoices.show');
+        });
+
+        Route::middleware('role:admin')->group(function () {
+            Route::delete('/clients/{id}', [AdminController::class, 'clientDelete'])->name('admin.clients.delete');
+
+            Route::get('/subscriptions/create', [AdminController::class, 'subscriptionCreate'])->name('admin.subscriptions.create');
+            Route::post('/subscriptions', [AdminController::class, 'subscriptionStore'])->name('admin.subscriptions.store');
+            Route::get('/subscriptions/{id}/edit', [AdminController::class, 'subscriptionEdit'])->name('admin.subscriptions.edit');
+            Route::put('/subscriptions/{id}', [AdminController::class, 'subscriptionUpdate'])->name('admin.subscriptions.update');
+            Route::get('/plans/{id}/edit', [AdminController::class, 'planEdit'])->name('admin.plans.edit');
+            Route::put('/plans/{id}', [AdminController::class, 'planUpdate'])->name('admin.plans.update');
+
+            Route::get('/users/create', [AdminController::class, 'userCreate'])->name('admin.users.create');
+            Route::post('/users', [AdminController::class, 'userStore'])->name('admin.users.store');
+            Route::get('/users/{id}/edit', [AdminController::class, 'userEdit'])->name('admin.users.edit');
+            Route::put('/users/{id}', [AdminController::class, 'userUpdate'])->name('admin.users.update');
+            Route::delete('/users/{id}', [AdminController::class, 'userDelete'])->name('admin.users.delete');
+        });
     });
 });

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Plan;
-use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -38,20 +37,5 @@ class ClientController extends Controller
         $upgradePlan = $plans->first(fn ($plan) => $plan->sort_order > $currentSortOrder);
 
         return view('client.dashboard', compact('client', 'activeSubscription', 'upgradePlan'));
-    }
-
-    public function reports()
-    {
-        return view('client.reports');
-    }
-
-    public function settings()
-    {
-        return view('client.settings');
-    }
-
-    public function support()
-    {
-        return view('client.support');
     }
 }

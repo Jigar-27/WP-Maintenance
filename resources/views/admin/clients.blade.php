@@ -325,6 +325,10 @@
 @endpush
 
 @section('content')
+@php
+    $canManageClients = auth()->check() && auth()->user()->hasAnyRole(['admin', 'manager']);
+    $canAccessInvoices = auth()->check() && auth()->user()->hasAnyRole(['admin', 'manager']);
+@endphp
 <div class="cl-container">
     {{-- Header Row --}}
     <div class="cl-header-wrap">
@@ -389,7 +393,6 @@
                             <th>STATUS</th>
                             <th>PLAN TIER</th>
                             <th>ENROLLED</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -427,13 +430,10 @@
                                 {{ $client->created_at->format('M d,') }}<br>
                                 {{ $client->created_at->format('Y') }}
                             </td>
-                            <td>
-                                <span class="material-icons-outlined" style="color:#a0aec0;cursor:pointer;">more_horiz</span>
-                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" style="text-align:center; padding: 3rem; color: #a0aec0;">No clients found in the system.</td>
+                            <td colspan="4" style="text-align:center; padding: 3rem; color: #a0aec0;">No clients found in the system.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -511,19 +511,23 @@
                     @endforelse
                 </div>
 
-                <a href="{{ $selectedClient->invoices->first() ? route('admin.invoices.show', $selectedClient->invoices->first()->id) : route('admin.invoices') }}" class="dt-btn btn-slate">
-                    <span class="material-icons-outlined" style="font-size:1.125rem">send</span> Resend Latest Invoice
-                </a>
-                <a href="{{ route('admin.invoices', ['search' => $selectedClient->email]) }}" class="dt-btn btn-light">View Billing History</a>
+                @if($canAccessInvoices)
+                    <a href="{{ $selectedClient->invoices->first() ? route('admin.invoices.show', $selectedClient->invoices->first()->id) : route('admin.invoices') }}" class="dt-btn btn-slate">
+                        <span class="material-icons-outlined" style="font-size:1.125rem">send</span> Resend Latest Invoice
+                    </a>
+                    <a href="{{ route('admin.invoices', ['search' => $selectedClient->email]) }}" class="dt-btn btn-light">View Billing History</a>
+                @endif
 
-                <div class="dt-footer-actions">
-                    <a href="{{ route('admin.clients.edit', $selectedClient->id) }}" class="dt-btn-outline">Edit Details</a>
-                    <form action="{{ route('admin.clients.suspend', $selectedClient->id) }}" method="POST" style="margin:0;">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" class="dt-btn-suspend" style="background:none;border:none;cursor:pointer;">Suspend Account</button>
-                    </form>
-                </div>
+                @if($canManageClients)
+                    <div class="dt-footer-actions">
+                        <a href="{{ route('admin.clients.edit', $selectedClient->id) }}" class="dt-btn-outline">Edit Details</a>
+                        <form action="{{ route('admin.clients.suspend', $selectedClient->id) }}" method="POST" style="margin:0;">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="dt-btn-suspend" style="background:none;border:none;cursor:pointer;">Suspend Account</button>
+                        </form>
+                    </div>
+                @endif
             </div>
             @endif
         </div>
