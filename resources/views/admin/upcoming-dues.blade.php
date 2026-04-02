@@ -321,12 +321,15 @@
             <tbody>
                 @forelse($dues as $due)
                 @php
-                    // Mocks & data mapping specifically for layout consistency
                     $hash = crc32($due->client->email);
                     
-                    $planMap = ['ENTERPRISE' => 'pl-enterprise', 'SCALEUP' => 'pl-scaleup', 'STARTUP' => 'pl-startup'];
-                    $tTier = ['ENTERPRISE', 'SCALEUP', 'STARTUP'][$hash % 3];
-                    $tClass = $planMap[$tTier];
+                    // Unified tier mapping from dynamic plan database
+                    $tTier = strtoupper($due->plan->name ?? 'UNKNOWN');
+                    $tClass = match(true) {
+                        str_contains($tTier, 'ENTERPRISE') => 'pl-enterprise',
+                        str_contains($tTier, 'SCALEUP') => 'pl-scaleup',
+                        default => 'pl-startup',
+                    };
                     
                     $days = $due->days_until_expiry ?? 0;
                     if ($days <= 0) {
@@ -337,7 +340,7 @@
                         $sLab = 'Processing'; $sClass = 's-processing';
                     }
                     
-                    $isAuto = ($hash % 2) == 0;
+                    $isAuto = $due->auto_renew ?? false;
                     $domain = parse_url($due->client->website_url ?? 'https://generic.com', PHP_URL_HOST) ?? 'website.com';
                 @endphp
                 <tr>

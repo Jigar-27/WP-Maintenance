@@ -253,6 +253,7 @@
 .b-active { background: #eefdf4; color: #16a34a; }
 .b-overdue { background: #fff5f5; color: #e53e3e; }
 .b-pending { background: #fffaf0; color: #dd6b20; }
+.b-suspended { background: #f1f5f9; color: #64748b; }
 
 /* Plan Tier */
 .cl-plan-cell { color: #4a6fa5; font-size: 0.9375rem; font-weight: 600; }
@@ -403,8 +404,9 @@
                                 'active' => ['class' => 'b-active', 'label' => 'ACTIVE'],
                                 'overdue' => ['class' => 'b-overdue', 'label' => 'OVERDUE'],
                                 'pending' => ['class' => 'b-pending', 'label' => 'PENDING'],
+                                'suspended' => ['class' => 'b-suspended', 'label' => 'SUSPENDED'],
                             ];
-                            $statConf = $statusMap[strtolower($client->status)] ?? $statusMap['active'];
+                            $statConf = $statusMap[strtolower($client->status)] ?? ['class' => 'b-suspended', 'label' => strtoupper($client->status)];
                             $host = parse_url($client->website_url ?? 'https://unknown.com', PHP_URL_HOST) ?? $client->website_url;
                             $firstLetter = strtoupper(substr($client->company_name ?? $client->first_name, 0, 1));
                         @endphp
@@ -453,6 +455,18 @@
                     <div>
                         <div class="dt-title">{{ $selectedClient->company_name ?? $selectedClient->full_name }}</div>
                         <div class="dt-sub">Managing since {{ $selectedClient->created_at->format('M Y') }}</div>
+                        <div style="margin-top: 8px;">
+                            @php
+                                $dStatusMap = [
+                                    'active' => ['class' => 'b-active', 'label' => 'ACTIVE'],
+                                    'overdue' => ['class' => 'b-overdue', 'label' => 'OVERDUE'],
+                                    'pending' => ['class' => 'b-pending', 'label' => 'PENDING'],
+                                    'suspended' => ['class' => 'b-suspended', 'label' => 'SUSPENDED'],
+                                ];
+                                $dStat = $dStatusMap[strtolower($selectedClient->status)] ?? ['class' => 'b-suspended', 'label' => strtoupper($selectedClient->status)];
+                            @endphp
+                            <span class="cl-badge {{ $dStat['class'] }}">{{ $dStat['label'] }}</span>
+                        </div>
                     </div>
                     <div class="cl-av-box cl-av-green" style="border-radius:12px;">{{ strtoupper(substr($selectedClient->company_name ?? $selectedClient->first_name, 0, 1)) }}</div>
                 </div>
@@ -521,11 +535,19 @@
                 @if($canManageClients)
                     <div class="dt-footer-actions">
                         <a href="{{ route('admin.clients.edit', $selectedClient->id) }}" class="dt-btn-outline">Edit Details</a>
-                        <form action="{{ route('admin.clients.suspend', $selectedClient->id) }}" method="POST" style="margin:0;">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="dt-btn-suspend" style="background:none;border:none;cursor:pointer;">Suspend Account</button>
-                        </form>
+                        @if($selectedClient->status === 'suspended')
+                            <form action="{{ route('admin.clients.activate', $selectedClient->id) }}" method="POST" style="margin:0;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="dt-btn-suspend" style="background:none;border:none;cursor:pointer;color:#16a34a;">Activate Account</button>
+                            </form>
+                        @else
+                            <form action="{{ route('admin.clients.suspend', $selectedClient->id) }}" method="POST" style="margin:0;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="dt-btn-suspend" style="background:none;border:none;cursor:pointer;">Suspend Account</button>
+                            </form>
+                        @endif
                     </div>
                 @endif
             </div>

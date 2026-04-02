@@ -39,6 +39,15 @@
             </div>
 
             <div class="form-group">
+                <label class="form-label" for="status">Account Status *</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="active" {{ old('status', $user->status) === 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ old('status', $user->status) === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                </select>
+                @error('status') <div class="form-error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="form-group">
                 <label class="form-label" for="password">New Password (optional)</label>
                 <input type="password" class="form-input" id="password" name="password" minlength="8">
                 @error('password') <div class="form-error">{{ $message }}</div> @enderror

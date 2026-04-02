@@ -310,6 +310,29 @@
             </div>
         </div>
 
+        {{-- Section 5: Account Configuration --}}
+        <div class="iv-section">
+            <div class="iv-sec-head">
+                <div class="iv-sec-title-wrap">
+                    <span class="iv-step-num">5</span>
+                    <span class="iv-sec-title">Account Configuration</span>
+                </div>
+            </div>
+            
+            <div class="iv-form-grid-3">
+                <div>
+                    <label class="iv-label">Account Status</label>
+                    <div class="iv-select-wrap">
+                        <select name="status" class="iv-select">
+                            <option value="active">Active (Default)</option>
+                            <option value="inactive">Inactive (Suspended)</option>
+                        </select>
+                        <span class="material-icons-outlined iv-select-icon">expand_more</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <input type="hidden" name="role" id="role_input" value="admin">
 
         {{-- Footer Block --}}

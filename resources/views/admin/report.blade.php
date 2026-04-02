@@ -141,7 +141,7 @@
         </div>
         <div class="rp-tools">
             <a href="javascript:void(0)" onclick="window.print()" class="rp-btn"><span class="material-icons-outlined" style="font-size:14px;">picture_as_pdf</span> Download PDF</a>
-            <img src="https://ui-avatars.com/api/?name=User&background=cbd5e0" class="rp-av" alt="Avatar">
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=cbd5e0" class="rp-av" alt="Avatar">
         </div>
     </nav>
 
@@ -151,7 +151,7 @@
             <div>
                 <div class="rp-pill">REPORT STATUS: ACTIVE</div>
                 <h1 class="rp-title">Monthly Maintenance Report</h1>
-                <div class="rp-sub">Reporting Period: October 2024</div>
+                <div class="rp-sub">Reporting Period: {{ $currentMonth }}</div>
             </div>
             <div class="rp-cloud-box">
                 <span class="material-icons-outlined c-icon">cloud_queue</span>
@@ -169,15 +169,15 @@
                 <div class="ex-text">Status: <span>Protected & Optimized.</span> Your site remains in the top 5% of WordPress instances globally for performance and security.</div>
                 <div class="ex-stats">
                     <div>
-                        <div class="ex-st-val">24</div>
+                        <div class="ex-st-val">{{ $totalUpdates }}</div>
                         <div class="ex-st-lbl">Total Updates</div>
                     </div>
                     <div>
-                        <div class="ex-st-val">744</div>
+                        <div class="ex-st-val">{{ $securityScans }}</div>
                         <div class="ex-st-lbl">Security Scans</div>
                     </div>
                     <div>
-                        <div class="ex-st-val">31</div>
+                        <div class="ex-st-val">{{ $cloudBackups }}</div>
                         <div class="ex-st-lbl">Cloud Backups</div>
                     </div>
                 </div>
@@ -188,7 +188,7 @@
             <div class="rp-card hl-card">
                 <div class="rp-lbl">Site Health Score</div>
                 <div class="hl-circle">
-                    <div class="hl-score">98</div>
+                    <div class="hl-score">{{ $healthScore }}</div>
                     <div class="hl-sub">/100</div>
                 </div>
                 <div class="hl-desc">Excellent. Above industry average.</div>
@@ -302,7 +302,7 @@
         <div class="rp-footer">
             <div class="rp-f-left">
                 <div class="rp-f-brand">WordPress Concierge</div>
-                <div class="rp-f-copy">© 2024 WordPress Care. Your site is in safe hands.</div>
+                <div class="rp-f-copy">© {{ date('Y') }} WordPress Care. Your site is in safe hands.</div>
             </div>
             <div class="rp-f-links">
                 <a href="{{ route('contact') }}">Support Desk</a>

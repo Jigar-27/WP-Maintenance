@@ -338,7 +338,7 @@
                     $initials = strtoupper(substr($user->name, 0, 1) . (strpos($user->name, ' ') ? substr($user->name, strpos($user->name, ' ') + 1, 1) : ''));
                     $hash = crc32($user->email);
                     $roleLabel = strtolower((string) $user->role);
-                    $isActive = ($hash % 5) != 0;
+                    $userStatus = strtolower((string) ($user->status ?: 'active'));
 
                     $roleMap = [
                         'admin' => ['class' => 'rb-admin', 'text' => 'ADMIN'],
@@ -347,13 +347,20 @@
                     ];
                     $roleClass = $roleMap[$roleLabel]['class'] ?? 'rb-support';
                     $roleText = $roleMap[$roleLabel]['text'] ?? strtoupper($roleLabel ?: 'SUPPORT');
-                    $statusClass = $isActive ? 'st-active' : 'st-inactive';
-                    $statusText = $isActive ? 'Active' : 'Inactive';
                     
-                    $lastLogin = $isActive ? Carbon\Carbon::now()->subMinutes($hash % 3000)->diffForHumans() : 'May 12, 2024';
-                    $ipBlock1 = 192;
-                    $ipBlock2 = ($hash % 200);
-                    $ipAddr = "{$ipBlock1}.168.{$ipBlock2}." . ($hash % 255);
+                    $lastLogin = $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never logged in';
+                    $ipAddr = $user->last_login_ip ?: '0.0.0.0';
+                    
+                    // Dynamic Activity Check: Consider a user "Active" (Online) if they are currently authenticated,
+                    // or logged in within the last 30 mins and their account status is explicitly 'active'.
+                    $isRecentlyActive = $user->last_login_at && $user->last_login_at->gt(now()->subMinutes(30));
+                    $userAccountActive = strtolower((string) ($user->status ?: 'active')) === 'active';
+                    $isMe = auth()->id() === $user->id;
+                    
+                    $realActive = $isMe || ($isRecentlyActive && $userAccountActive);
+                    
+                    $statusClass = $realActive ? 'st-active' : 'st-inactive';
+                    $statusText = $realActive ? 'Active' : 'Inactive';
                 @endphp
                 <tr>
                     <td>

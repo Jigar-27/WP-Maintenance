@@ -28,6 +28,7 @@ Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms');
 Route::get('/disclaimer', [HomeController::class, 'disclaimer'])->name('disclaimer');
 Route::get('/refund-policy', [HomeController::class, 'refund'])->name('refund');
+Route::get('/sample-report', [HomeController::class, 'sampleReport'])->name('sample.report');
 
 // ─── Onboarding & Payment ───────────────────────────────────
 Route::get('/onboard/{plan}', [OnboardingController::class, 'show'])->name('onboard');
@@ -62,6 +63,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/clients/{id}/edit', [AdminController::class, 'clientEdit'])->name('admin.clients.edit');
             Route::put('/clients/{id}', [AdminController::class, 'clientUpdate'])->name('admin.clients.update');
             Route::patch('/clients/{id}/suspend', [AdminController::class, 'clientSuspend'])->name('admin.clients.suspend');
+            Route::patch('/clients/{id}/activate', [AdminController::class, 'clientActivate'])->name('admin.clients.activate');
             Route::post('/upcoming-dues/{id}/send-reminder', [AdminController::class, 'sendUpcomingDueReminder'])->name('admin.dues.send-reminder');
 
             Route::get('/invoices', [AdminController::class, 'invoices'])->name('admin.invoices');

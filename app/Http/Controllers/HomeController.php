@@ -48,4 +48,9 @@ class HomeController extends Controller
     {
         return view('frontend.refund');
     }
+
+    public function sampleReport()
+    {
+        return view('frontend.sample-report');
+    }
 }

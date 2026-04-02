@@ -14,12 +14,12 @@
 .disc-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 4rem 1.5rem;
+    padding: 1.5rem 1.5rem 4rem 1.5rem;
 }
 
 /* Header Section */
 .disc-header {
-    margin-bottom: 3.5rem;
+    margin-bottom: 2rem;
 }
 .disc-badge {
     display: inline-block;

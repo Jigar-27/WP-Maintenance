@@ -120,7 +120,7 @@
                     <ul class="fp-footer-links">
                         <li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
                         <li><a href="{{ route('disclaimer') }}">Disclaimer</a></li>
-                        <li><a href="{{ route('refund') }}">Refund Default Account</a></li>
+                        <li><a href="{{ route('refund') }}">Refund Policy</a></li>
                     </ul>
                 </div>
                 <div>

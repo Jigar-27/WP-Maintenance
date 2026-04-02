@@ -77,10 +77,10 @@
                 <div class="im-kpi-value-row">
                     <div class="im-kpi-value">{{ $totalClients }}</div>
                     <div class="im-kpi-avatars">
-                        <img src="https://ui-avatars.com/api/?name=A&background=f0f3ff&color=2d3a5a" alt="Client A">
-                        <img src="https://ui-avatars.com/api/?name=B&background=e9eefc&color=2d3a5a" alt="Client B">
-                        <img src="https://ui-avatars.com/api/?name=C&background=f3eefc&color=2d3a5a" alt="Client C">
-                        <span>+{{ max(0, $totalClients - 3) }}</span>
+                        @foreach($topClients as $tClient)
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($tClient->company_name ?: $tClient->first_name) }}&background=f0f3ff&color=2d3a5a" alt="{{ $tClient->company_name ?: $tClient->first_name }}">
+                        @endforeach
+                        <span>+{{ max(0, $totalClients - count($topClients)) }}</span>
                     </div>
                 </div>
             </div>

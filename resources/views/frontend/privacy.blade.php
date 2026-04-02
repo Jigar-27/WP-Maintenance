@@ -14,12 +14,12 @@
 .privacy-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 4rem 1.5rem;
+    padding: 1.5rem 1.5rem 4rem 1.5rem;
 }
 
 /* Header Section */
 .priv-header {
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
 }
 .priv-badge {
     display: inline-block;

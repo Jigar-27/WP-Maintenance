@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@wpmaintenance.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
+            'status' => 'active',
+            'last_login_at' => now()->subMinutes(34),
+            'last_login_ip' => '192.168.34.19',
             'email_verified_at' => now(),
         ]);
 
@@ -29,6 +32,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'manager@wpmaintenance.com',
             'password' => Hash::make('password'),
             'role' => 'manager',
+            'status' => 'active',
+            'last_login_at' => now()->subHours(10),
+            'last_login_ip' => '192.168.43.148',
             'email_verified_at' => now(),
         ]);
 
@@ -37,6 +43,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'support@wpmaintenance.com',
             'password' => Hash::make('password'),
             'role' => 'support',
+            'status' => 'active',
+            'last_login_at' => now()->subHours(20),
+            'last_login_ip' => '192.168.12.252',
             'email_verified_at' => now(),
         ]);
 

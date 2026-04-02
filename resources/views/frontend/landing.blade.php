@@ -86,28 +86,46 @@ p { line-height: 1.6; margin: 0; }
 
 /* 3. Pricing */
 .pricing-sec { padding: 6rem 0; text-align: center; }
-.pricing-title { font-size: 2.25rem; margin-bottom: 0.75rem; }
+.pricing-title { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem; color: #1e293b; }
 .pricing-subtitle { font-size: 1rem; color: var(--lp-text-light); margin-bottom: 4rem; }
-.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: center; max-width: 1000px; margin: 0 auto; text-align: left; }
-.pr-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 2.5rem 2rem; position: relative; }
-.pr-card.popular { border: 2px solid var(--lp-primary); transform: scale(1.05); box-shadow: 0 20px 40px rgba(234, 88, 12, 0.08); background: #fffcfb; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch; max-width: 1000px; margin: 0 auto; text-align: left; }
+
+.pr-card { 
+    background: white; border: 1px solid #e2e8f0; border-radius: 24px; padding: 3rem 2.25rem; 
+    position: relative; transition: all 0.3s ease; display: flex; flex-direction: column;
+}
+.pr-card.popular { 
+    border: 2px solid #b45309; transform: translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06); 
+    z-index: 10;
+}
 .pr-tag {
     position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-    background: var(--lp-primary); color: white; padding: 4px 12px; border-radius: 20px;
-    font-size: 0.6875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+    background: #b45309; color: white; padding: 5px 16px; border-radius: 99px;
+    font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
 }
-.pr-name { font-size: 1.125rem; font-weight: 800; color: var(--lp-dark); margin-bottom: 0.25rem; }
-.pr-desc { font-size: 0.8125rem; color: var(--lp-text-light); margin-bottom: 1.5rem; display: block; }
-.pr-price { font-size: 2.5rem; font-weight: 800; color: var(--lp-dark); margin-bottom: 1.5rem; line-height: 1; }
-.pr-price span { font-size: 1rem; color: var(--lp-text-light); font-weight: 600; }
-.pr-feat { list-style: none; padding: 0; margin: 0 0 2rem 0; display: flex; flex-direction: column; gap: 0.875rem; }
-.pr-feat li { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; color: var(--lp-text); font-weight: 500;}
-.pr-feat li span { color: var(--lp-primary); font-size: 1.125rem; }
-.btn-outline { border: 2px solid #e2e8f0; color: var(--lp-primary); background: transparent; padding: 0.875rem; width: 100%; display: block; text-align: center; border-radius: 6px; font-weight: 700; text-decoration: none; transition: border-color 0.2s;}
-.btn-outline:hover { border-color: var(--lp-primary); }
-.btn-pop { background: var(--lp-primary); color: white; padding: 0.875rem; width: 100%; display: block; text-align: center; border-radius: 6px; font-weight: 700; text-decoration: none; border: 2px solid var(--lp-primary); transition: background 0.2s; }
-.btn-pop:hover { background: var(--lp-primary-hover); border-color: var(--lp-primary-hover); }
-.pr-link { display: block; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--lp-text-light); margin-top: 1rem; text-decoration: none; }
+.pr-name { font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; }
+.pr-desc { font-size: 0.8125rem; font-style: italic; color: #64748b; margin-bottom: 1.5rem; display: block; }
+.pr-price { font-size: 3rem; font-weight: 800; color: #1e293b; margin-bottom: 2rem; line-height: 1; }
+.pr-price span { font-size: 1.125rem; color: #94a3b8; font-weight: 500; margin-left: 2px; }
+
+.pr-feat { list-style: none; padding: 0; margin: 0 0 2.5rem 0; display: flex; flex-direction: column; gap: 1rem; }
+.pr-feat li { display: flex; align-items: center; gap: 12px; font-size: 0.875rem; color: #475569; font-weight: 500;}
+.pr-feat li span { color: #b45309; font-size: 1.25rem; }
+
+.btn-secure { 
+    width: 100%; border-radius: 12px; padding: 1rem; 
+    font-weight: 800; text-decoration: none; text-align: center; 
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: auto; transition: 0.2s;
+}
+.btn-outline { border: 2px solid #b45309; color: #b45309; background: transparent; }
+.btn-outline:hover { background: #fff7ed; }
+.btn-pop { background: #ea580c; color: white; border: none; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3); }
+.btn-pop:hover { background: #c2410c; }
+
+.pr-sla { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 1.25rem; text-decoration: none; }
+.pr-sla:hover { color: #334155; }
 
 /* 4. Trust + Stats Band */
 .stats-sec { background: #f0f4ff; padding: 4.5rem 0 4.8rem; text-align: center; }
@@ -190,30 +208,48 @@ p { line-height: 1.6; margin: 0; }
     margin-bottom: 0.85rem;
     display: block;
 }
-.sc-partner-logo {
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: #273956;
-    letter-spacing: 0.01em;
-    margin-bottom: 1.25rem;
+.sc-partner-logo { 
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
 }
-.sc-divider { height: 1px; background: #eceff6; width: 100%; margin: 0 auto 1.25rem; }
+.sc-partner-logo img {
+    height: 85px; 
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+.sc-partner-logo a:hover img { transform: scale(1.05); }
+.sc-divider { height: 1px; background: #eceff6; width: 100%; margin: 2rem auto 2rem; }
 .sc-logos {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.7rem;
-    color: #9ca3af;
+    gap: 1.25rem;
 }
-.sc-pay-chip {
-    border: 1px solid #eceff6;
-    border-radius: 0.45rem;
-    padding: 0.28rem 0.52rem;
-    font-size: 0.68rem;
-    font-weight: 800;
-    color: #6b7280;
+.sc-logos .sc-chip {
+    border: 1px solid #f1f5f9;
+    background: white;
+    padding: 6px 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.sc-logos .sc-chip:hover { border-color: #cbd5e1; transform: translateY(-2px); }
+.sc-logos .sc-chip img {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
 }
 .sc-more {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
     font-size: 0.74rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -310,29 +346,46 @@ p { line-height: 1.6; margin: 0; }
             
             <div class="pricing-grid">
                 @foreach($plans as $plan)
-                    <div class="pr-card {{ $plan->is_popular ? 'popular' : '' }}">
-                        @if($plan->is_popular)
+                    <div class="pr-card {{ $plan->name === 'The Scaleup' ? 'popular' : '' }}">
+                        @if($plan->name === 'The Scaleup')
                             <div class="pr-tag">MOST POPULAR</div>
                         @endif
 
                         <div class="pr-name">{{ $plan->name }}</div>
-                        <span class="pr-desc">{{ $plan->description ?: ('Best for ' . ($plan->best_for ?: 'growing businesses')) }}</span>
-                        <div class="pr-price">${{ number_format($plan->price, 0) }}<span>/mo</span></div>
+                        <span class="pr-desc">Best For: {{ $plan->best_for ?: ($plan->name === 'The Startup' ? 'Informative Websites' : ($plan->name === 'The Scaleup' ? 'WooCommerce Stores' : 'Mission-Critical Systems')) }}</span>
+                        <div class="pr-price">${{ number_format($plan->price, 0) }}<span>/year</span></div>
 
                         <ul class="pr-feat">
-                            @forelse(collect($plan->features)->take(5) as $feature)
-                                <li><span class="material-icons-outlined">check</span> {{ $feature }}</li>
-                            @empty
-                                <li><span class="material-icons-outlined">check</span> {{ $plan->dev_hours }} hours dev / maintenance</li>
-                                <li><span class="material-icons-outlined">check</span> Ongoing security monitoring</li>
-                                <li><span class="material-icons-outlined">check</span> Performance optimization</li>
-                            @endforelse
+                            @if($plan->name === 'The Startup')
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Standard Maintenance</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Basic Security</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Uptime Monitoring</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> 60 hours development support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @elseif($plan->name === 'The Scaleup')
+                                <li><span class="material-icons-outlined">check_circle_outline</span> All features of The Startup</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Priority Support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Daily Backups</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> 120 hour development support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @else
+                                <li><span class="material-icons-outlined">check_circle_outline</span> All features of The Scaleup</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Ecommerce Optimization</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Dedicated Manager</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> 200 hours development support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @endif
                         </ul>
 
-                        <a href="{{ route('onboard', $plan->slug) }}" class="{{ $plan->is_popular ? 'btn-pop' : 'btn-outline' }}">
-                            {{ $plan->is_popular ? 'Choose ' . $plan->name : 'Select Plan' }}
+                        <a href="{{ route('onboard', $plan->slug) }}" class="btn-secure {{ $plan->name === 'The Scaleup' ? 'btn-pop' : 'btn-outline' }}">
+                            @if($plan->name === 'The Scaleup')
+                                <span class="material-icons-outlined">shopping_cart</span>
+                            @endif
+                            Secure WP Now
                         </a>
-                        <a href="{{ route('onboard', $plan->slug) }}" class="pr-link">View Plan breakdown &gt;</a>
+                        <a href="https://example.com/sla" class="pr-sla" target="_blank">
+                            Service-level agreement <span class="material-icons-outlined" style="font-size: 0.8125rem;">open_in_new</span>
+                        </a>
                     </div>
                 @endforeach
             </div>
@@ -377,11 +430,19 @@ p { line-height: 1.6; margin: 0; }
                     Secure Encrypted Checkout
                 </div>
                 <span class="sc-bot">Trusted Payment Partner</span>
-                <div class="sc-partner-logo">Razorpay</div>
+                <div class="sc-partner-logo">
+                    <a href="https://razorpay.com" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ asset('images/razorpay_logo.png') }}" alt="Razorpay">
+                    </a>
+                </div>
                 <div class="sc-divider"></div>
                 <div class="sc-logos">
-                    <span class="sc-pay-chip">VISA</span>
-                    <span class="sc-pay-chip">MC</span>
+                    <a href="https://visa.com" target="_blank" rel="noopener noreferrer" class="sc-chip">
+                        <img src="{{ asset('images/visa_logo.png') }}" alt="Visa">
+                    </a>
+                    <a href="https://mastercard.com" target="_blank" rel="noopener noreferrer" class="sc-chip">
+                        <img src="{{ asset('images/mc_logo.png') }}" alt="Mastercard">
+                    </a>
                     <span class="sc-more">&amp; MORE</span>
                 </div>
             </div>
