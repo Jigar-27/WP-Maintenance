@@ -39,7 +39,12 @@
         </div>
 
         <div style="display:flex; gap: var(--space-4); flex-wrap:wrap; justify-content:center">
-            <a href="{{ route('client.dashboard') }}" class="btn btn-primary">Back to Home</a>
+            @if(isset($invoice))
+                <a href="{{ route('invoice.public', $invoice->id) }}" class="btn btn-primary" target="_blank">
+                    <span class="material-icons-outlined" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">receipt_long</span>View Invoice
+                </a>
+            @endif
+            <a href="{{ route('home') }}" class="btn btn-primary">Back to Home</a>
             <a href="{{ route('contact') }}" class="btn btn-outline">Contact Support</a>
         </div>
     </div>

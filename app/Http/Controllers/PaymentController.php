@@ -48,7 +48,7 @@ class PaymentController extends Controller
             'total' => round($subscription->amount * 1.18, 2),
             'status' => 'paid',
             'issue_date' => Carbon::now(),
-            'due_date' => Carbon::now()->addDays(7),
+            'due_date' => $subscription->end_date,
             'paid_date' => Carbon::now(),
         ]);
 
@@ -79,6 +79,13 @@ class PaymentController extends Controller
     public function success($subscriptionId)
     {
         $subscription = Subscription::with(['client', 'plan'])->findOrFail($subscriptionId);
-        return view('frontend.success', compact('subscription'));
+        $invoice = Invoice::where('subscription_id', $subscription->id)->latest()->first();
+        return view('frontend.success', compact('subscription', 'invoice'));
+    }
+
+    public function publicInvoice($invoiceId)
+    {
+        $invoice = Invoice::with(['client', 'subscription.plan'])->findOrFail($invoiceId);
+        return view('frontend.invoice', compact('invoice'));
     }
 }

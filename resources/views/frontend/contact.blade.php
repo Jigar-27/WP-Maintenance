@@ -5,7 +5,7 @@
 
 @section('content')
 <section class="section contact-page">
-    <div class="container container-wide">
+    <div class="fp-container">
         {{-- Hero Header --}}
         <div class="contact-hero" data-animate>
             <span class="badge-mini">CONTACT US</span>

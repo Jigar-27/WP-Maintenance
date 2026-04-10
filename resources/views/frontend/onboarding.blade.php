@@ -23,11 +23,21 @@
                 </div>
                 <div>
                     <div class="selected-plan-name">{{ $plan->name }}</div>
-                    <div class="body-sm text-muted">{{ $plan->best_for }}</div>
+                    <div class="body-sm text-muted">{{ $plan->best_for }} · {{ ucfirst($billingCycle) }}</div>
                 </div>
             </div>
             <div>
-                <div class="selected-plan-price">${{ number_format($plan->price) }}<span class="body-sm text-muted">/mo</span></div>
+                @php
+                    $cycleLabel = match($billingCycle) { 'quarterly' => '/qtr', 'yearly' => '/yr', default => '/mo' };
+                    $multiplier = match($billingCycle) { 'quarterly' => 3, 'yearly' => 12, default => 1 };
+                    $discountPct = match($billingCycle) { 'quarterly' => $plan->quarterly_discount ?? 10, 'yearly' => $plan->yearly_discount ?? 20, default => 0 };
+                    $rawPrice = $plan->price * $multiplier;
+                    $displayPrice = round($rawPrice * (1 - $discountPct / 100));
+                @endphp
+                <div class="selected-plan-price">${{ number_format($displayPrice) }}<span class="body-sm text-muted">{{ $cycleLabel }}</span></div>
+                @if($discountPct > 0)
+                    <div style="font-size:0.75rem; color:#16a34a; font-weight:700;">Save {{ (int)$discountPct }}%</div>
+                @endif
                 <a href="{{ route('plans') }}" class="body-sm text-primary">Change Plan</a>
             </div>
         </div>
@@ -36,6 +46,7 @@
         <div class="onboarding-card" data-animate>
             <form action="{{ route('onboard.store', $plan->slug) }}" method="POST" id="onboardingForm">
                 @csrf
+                <input type="hidden" name="billing_cycle" value="{{ $billingCycle }}">
 
                 {{-- Website Details --}}
                 <div class="form-section">

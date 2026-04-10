@@ -5,7 +5,7 @@
 
 @section('content')
 <section class="section faq-page">
-    <div class="container">
+    <div class="fp-container">
         {{-- Hero Header --}}
         <div class="text-center faq-hero" data-animate>
             <span class="badge-accent">SUPPORT CENTER</span>

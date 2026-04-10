@@ -74,20 +74,32 @@ class AdminController extends Controller
 
     public function dashboard(Request $request)
     {
-        // KPI cards
-        $totalSubscriptions = Client::where('status', 'active')->count();
-        $activeSubscriptions = Subscription::where('status', 'active')->get();
+        // Dynamic status thresholds (synced with subscriptions page logic)
+        $now = Carbon::now();
+        $threshold = Carbon::now()->addDays(15);
+
+        // Active = end_date > 15 days away AND client not suspended
+        $totalSubscriptions = Subscription::where('end_date', '>', $threshold)
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
+            ->count();
+
+        // Revenue from all non-expired, non-cancelled subscriptions
+        $activeSubscriptions = Subscription::where('end_date', '>=', $now)
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
+            ->get();
         $totalRevenue = $activeSubscriptions->sum('amount');
-        if ($totalRevenue <= 0) $totalRevenue = 244500; // Fallback for mockup if no data
+
         
         $totalClients = Client::count();
         $topClients = Client::latest()->take(3)->get();
         
         // Dynamic Growth Calculation
-        $lastMonthCount = Subscription::where('status', 'active')
+        $lastMonthCount = Subscription::where('end_date', '>', $threshold)
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
             ->whereDate('created_at', '<', Carbon::now()->startOfMonth())
             ->count();
-        $thisMonthCount = Subscription::where('status', 'active')
+        $thisMonthCount = Subscription::where('end_date', '>', $threshold)
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
             ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
             ->count();
         
@@ -95,17 +107,19 @@ class AdminController extends Controller
             ? round(($thisMonthCount / $lastMonthCount) * 100, 1) 
             : ($thisMonthCount > 0 ? 100 : 0);
 
-        if ($subscriptionGrowth == 0) $subscriptionGrowth = 12.5; // Visual fallback for empty db
+
 
         $recentSubscriptions = Subscription::with(['client', 'plan'])
-            ->where('status', 'active')
+            ->where('end_date', '>=', $now)
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
             ->latest()
-            ->take(5) // Show more if available
+            ->take(5)
             ->get();
 
         $upcomingDues = Subscription::with(['client', 'plan'])
-            ->where('status', 'active')
-            ->where('end_date', '>=', Carbon::now())
+            ->where('end_date', '>=', $now)
+            ->where('end_date', '<=', $threshold)
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
             ->orderBy('end_date')
             ->take(3)
             ->get();
@@ -241,7 +255,6 @@ class AdminController extends Controller
             'phone' => 'nullable|string|max:20',
             'company_name' => 'nullable|string|max:255',
             'website_url' => 'required|url',
-            'status' => 'required|in:active,inactive,suspended',
             'notes' => 'nullable|string',
         ]);
 
@@ -287,7 +300,6 @@ class AdminController extends Controller
         $search = trim((string) $request->query('search', ''));
         $selectedPlan = $request->query('plan_id');
         $selectedStatus = $request->query('status');
-        $allowedStatuses = ['active', 'expired', 'cancelled', 'pending'];
 
         $query = Subscription::with(['client', 'plan'])->latest();
 
@@ -309,8 +321,42 @@ class AdminController extends Controller
             $query->where('plan_id', $selectedPlan);
         }
 
-        if ($selectedStatus && in_array($selectedStatus, $allowedStatuses, true)) {
-            $query->where('status', $selectedStatus);
+        // Dynamic status filtering based on computed conditions
+        if ($selectedStatus) {
+            $now = Carbon::now();
+            $threshold = Carbon::now()->addDays(15);
+
+            switch ($selectedStatus) {
+                case 'expired':
+                    // end_date is in the past
+                    $query->where('end_date', '<', $now);
+                    break;
+                case 'cancelled':
+                    // client account is suspended
+                    $query->whereHas('client', fn($q) => $q->where('status', 'suspended'));
+                    break;
+                case 'expiring':
+                    // end_date ≤ 15 days away AND auto_renew is off AND not expired AND client not suspended
+                    $query->where('end_date', '>=', $now)
+                          ->where('end_date', '<=', $threshold)
+                          ->where(function($q) {
+                              $q->where('auto_renew', false)->orWhereNull('auto_renew');
+                          })
+                          ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'));
+                    break;
+                case 'pending':
+                    // end_date ≤ 15 days away AND auto_renew is on AND not expired AND client not suspended
+                    $query->where('end_date', '>=', $now)
+                          ->where('end_date', '<=', $threshold)
+                          ->where('auto_renew', true)
+                          ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'));
+                    break;
+                case 'active':
+                    // end_date > 15 days away AND client not suspended
+                    $query->where('end_date', '>', $threshold)
+                          ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'));
+                    break;
+            }
         }
 
         if ($request->query('export') === 'csv') {
@@ -448,6 +494,8 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'best_for' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
+            'quarterly_discount' => 'nullable|numeric|min:0|max:100',
+            'yearly_discount' => 'nullable|numeric|min:0|max:100',
             'billing_cycle' => 'required|in:monthly,quarterly,yearly',
             'dev_hours' => 'nullable|integer|min:0',
             'features' => 'nullable|string',
@@ -468,6 +516,8 @@ class AdminController extends Controller
             'description' => $validated['description'] ?? null,
             'best_for' => $validated['best_for'] ?? null,
             'price' => $validated['price'],
+            'quarterly_discount' => $validated['quarterly_discount'] ?? 10,
+            'yearly_discount' => $validated['yearly_discount'] ?? 20,
             'billing_cycle' => $validated['billing_cycle'],
             'dev_hours' => $validated['dev_hours'] ?? 0,
             'features' => $features,
@@ -543,15 +593,27 @@ class AdminController extends Controller
 
         $dues = $query->get();
 
-        // Precalculated / Mocked stats to seamlessly match the requested UI
-        $totalOutstanding = Invoice::whereIn('status', ['pending', 'overdue'])->sum('total') ?: 24450;
-        $dueThisWeek = Subscription::whereBetween('end_date', [Carbon::now()->startOfDay(), Carbon::now()->addDays(7)->endOfDay()])->sum('amount') ?: 8120;
-        $pendingSites = Subscription::where('status', 'pending')->count() ?: 4;
-        $overdueAmount = Invoice::where('status', 'overdue')->sum('total') ?: 3200;
-        $criticalAlerts = Invoice::where('status', 'overdue')->whereDate('due_date', '<', Carbon::now()->subDays(3))->count() ?: 2;
+        // Fully dynamic stats — no hardcoded fallbacks
+        $totalOutstanding = Invoice::whereIn('status', ['pending', 'overdue'])->sum('total');
+        $dueThisWeek = Subscription::whereBetween('end_date', [Carbon::now()->startOfDay(), Carbon::now()->addDays(7)->endOfDay()])->sum('amount');
+        $pendingSites = Subscription::where('end_date', '>=', Carbon::now())
+            ->where('end_date', '<=', Carbon::now()->addDays(15))
+            ->whereHas('client', fn($q) => $q->where('status', '!=', 'suspended'))
+            ->count();
+        $overdueAmount = Invoice::where('status', 'overdue')->sum('total');
+        $criticalAlerts = Invoice::where('status', 'overdue')->whereDate('due_date', '<', Carbon::now()->subDays(3))->count();
+
+        // Month-over-month outstanding growth
+        $lastMonthOutstanding = Invoice::whereIn('status', ['pending', 'overdue'])
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->sum('total');
+        $outstandingGrowth = $lastMonthOutstanding > 0
+            ? round((($totalOutstanding - $lastMonthOutstanding) / $lastMonthOutstanding) * 100)
+            : 0;
 
         return view('admin.upcoming-dues', compact(
-            'dues', 'totalOutstanding', 'dueThisWeek', 'pendingSites', 'overdueAmount', 'criticalAlerts', 'search'
+            'dues', 'totalOutstanding', 'dueThisWeek', 'pendingSites', 'overdueAmount', 'criticalAlerts', 'search', 'outstandingGrowth'
         ));
     }
 

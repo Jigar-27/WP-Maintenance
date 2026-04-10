@@ -116,31 +116,29 @@
             </table>
         </div>
 
+        @if($upcomingDues->count())
         <div class="im-dues-card">
             <div class="im-dues-head">
                 <span class="material-icons-outlined">notifications_active</span>
                 Upcoming Dues
             </div>
 
-            @forelse($upcomingDues as $due)
+            @foreach($upcomingDues as $due)
                 <div class="im-due-item">
                     <div>
                         <div class="im-due-name">{{ $due->client->company_name ?: $due->client->full_name }}</div>
-                        <div class="im-due-sub">Expiring in {{ now()->diffInDays($due->end_date) }} days</div>
+                        <div class="im-due-sub">Expiring in {{ (int) now()->diffInDays($due->end_date) }} days</div>
                     </div>
                     <div>
                         <div class="im-due-amount">${{ number_format($due->amount ?: $due->plan->price) }}</div>
                         <div class="im-due-method">{{ strtoupper($due->payment_method ?: 'INVOICING') }}</div>
                     </div>
                 </div>
-            @empty
-                <div class="im-due-item">
-                    <div class="im-due-sub">No upcoming dues.</div>
-                </div>
-            @endforelse
+            @endforeach
 
             <a href="{{ route('admin.dues') }}" class="im-dues-link">View All Dues</a>
         </div>
+        @endif
     </div>
 
 </div>

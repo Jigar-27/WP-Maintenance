@@ -7,6 +7,13 @@
     <title>@yield('title', 'WP Maintenance') — Premium WordPress Concierge</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23FF5722'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Inter,sans-serif' font-weight='800' font-size='18'>W</text></svg>">
+    
+    {{-- Level 6: Native View Transitions (SPA Morphing) --}}
+    <meta name="view-transition" content="same-origin">
+    
+    {{-- Level 6: Lenis Smooth Scroll Library --}}
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
     @stack('styles')
 </head>
     <style>
@@ -17,7 +24,23 @@
             --fp-bg: #f8fafc;
         }
         body { font-family: 'Inter', sans-serif; background: #ffffff; color: #334155; margin: 0; }
-        .fp-container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+        
+        /* Native View Transition Keyframes */
+        @keyframes fade-in { from { opacity: 0; } }
+        @keyframes fade-out { to { opacity: 0; } }
+        @keyframes slide-from-right { from { transform: translateX(30px); } }
+        @keyframes slide-to-left { to { transform: translateX(-30px); } }
+        ::view-transition-old(root) { animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left; }
+        ::view-transition-new(root) { animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right; }
+        
+        /* Lenis Required Styling */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+        .fp-container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
         
         /* Navbar */
         .fp-nav {
@@ -49,7 +72,8 @@
             padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 700; font-size: 0.9375rem;
             transition: background 0.2s;
         }
-        .fp-btn-trial:hover { background: var(--fp-primary-hover); }
+        .fp-btn-trial:hover { color: white; background: var(--fp-primary); }
+        /* .fp-btn-trial:hover removed background change to make it static */
 
         /* Footer */
         .fp-footer {
@@ -85,14 +109,14 @@
             </a>
             
             <ul class="fp-nav-links" id="fpNavLinks">
-                <li><a href="{{ route('home') }}" class="active">About</a></li>
-                <li><a href="{{ route('plans') }}">Pricing</a></li>
-                <li><a href="{{ route('faq') }}">FAQ</a></li>
-                <li><a href="{{ route('contact') }}">Contact</a></li>
+                <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
+                <li><a href="{{ route('plans') }}" class="{{ request()->routeIs('plans') ? 'active' : '' }}">Pricing</a></li>
+                <li><a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a></li>
+                <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
             </ul>
             
             <div class="fp-nav-right">
-                <a href="{{ route('admin.login') }}" class="fp-login-link">Login</a>
+                <a href="{{ route('admin.login') }}" class="fp-login-link" style="display:none;">Login</a>
                 <a href="{{ route('plans') }}" class="fp-btn-trial">Get Started</a>
                 <button class="fp-mobile-toggle" id="fpMenuToggle" style="display:none; background:none; border:none; cursor:pointer; padding:4px;" aria-label="Toggle menu">
                     <span class="material-icons-outlined" style="font-size:1.75rem; color:#0f172a;">menu</span>
@@ -163,6 +187,24 @@
                 link.addEventListener('click', () => fpNav.classList.remove('fp-nav-open'));
             });
         }
+
+        // ── Initialize Lenis Smooth Scroll ──
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        })
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
     </script>
     @stack('scripts')
 </body>

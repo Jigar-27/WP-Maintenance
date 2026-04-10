@@ -267,7 +267,7 @@
             <div class="ud-stat-label">Total Outstanding</div>
             <div class="ud-stat-val-row">
                 <div class="ud-stat-val">${{ number_format($totalOutstanding) }}</div>
-                <div class="ud-stat-sub sub-red">+12% vs<br>last month</div>
+                <div class="ud-stat-sub {{ $outstandingGrowth >= 0 ? 'sub-red' : 'sub-blue' }}">{{ $outstandingGrowth >= 0 ? '+' : '' }}{{ $outstandingGrowth }}% vs<br>last month</div>
             </div>
         </div>
         

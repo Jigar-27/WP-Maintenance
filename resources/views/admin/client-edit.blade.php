@@ -43,12 +43,23 @@
                 @error('website_url') <div class="form-error">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
-                <label class="form-label" for="status">Status</label>
-                <select class="form-select" id="status" name="status">
-                    <option value="active" {{ $client->status === 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="inactive" {{ $client->status === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                    <option value="suspended" {{ $client->status === 'suspended' ? 'selected' : '' }}>Suspended</option>
-                </select>
+                <label class="form-label">Status</label>
+                @php
+                    $statusColor = match($client->status) {
+                        'active' => '#16a34a',
+                        'inactive' => '#b45309',
+                        'suspended' => '#dc2626',
+                        default => '#64748b',
+                    };
+                    $statusLabel = ucfirst($client->status);
+                @endphp
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $statusColor }};"></span>
+                    <span style="font-weight: 700; font-size: 0.9375rem; color: {{ $statusColor }};">{{ $statusLabel }}</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.8125rem; color: #94a3b8; line-height: 1.5;">
+                    Status is managed via Suspend / Activate actions on the client detail page.
+                </div>
             </div>
             <div class="form-group form-full">
                 <label class="form-label" for="notes">Notes</label>
@@ -58,4 +69,5 @@
         <button type="submit" class="btn btn-primary btn-lg mt-4">Update Client</button>
     </form>
 </div>
+
 @endsection

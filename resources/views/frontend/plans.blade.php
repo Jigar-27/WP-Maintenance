@@ -5,49 +5,78 @@
 
 @section('content')
 <section class="section" style="padding-top: calc(var(--space-24) + 100px); padding-bottom: var(--space-20);">
-    <div class="container" style="max-width: 1200px">
+    <div class="fp-container">
         {{-- Hero Header --}}
-        <div class="text-center mb-48" data-animate>
-            <h1 class="display-lg" style="color: #010101; margin-bottom: 2.5rem; font-weight: 800; line-height: 1.1;">Choose Your Digital <br> Guardian Plan</h1>
-            <p class="body-lg text-muted" style="max-width: 600px; margin: 0 auto; line-height: 1.6;">Select the service level that fits your business needs. All plans include 24/7 security and monthly reporting.</p>
+        <div class="text-center mb-32" data-animate>
+            <h1 class="display-lg" style="color: #010101; margin-bottom: 2rem; font-weight: 800; line-height: 1.1; font-size: 3.25rem;">Choose Your Digital <br> Guardian Plan</h1>
+            <p class="body-lg text-muted" style="max-width: 600px; margin: 0 auto; line-height: 1.6; font-size: 0.95rem;">Select the service level that fits your business needs. All plans include 24/7 security and monthly reporting.</p>
         </div>
 
-        {{-- Pricing Grid (Re-using landing logic but with /year) --}}
-        <div class="pricing-grid" style="padding-top: 4rem; padding-bottom: 6rem; margin-bottom: 2rem;">
+        {{-- Billing Cycle Toggle --}}
+        <div style="display:flex; justify-content:center; margin-bottom:3rem;">
+            <div class="billing-toggle" id="billingToggle" style="display:inline-flex; position:relative; background:#f1f5f9; border-radius:12px; padding:4px; border:1px solid #e2e8f0;">
+                <button type="button" class="billing-opt active" data-cycle="monthly" style="position:relative; z-index:2; padding:0.65rem 1.5rem; border:none; background:none; font-weight:700; font-size:0.875rem; color:#64748b; cursor:pointer; border-radius:10px; transition:color 0.3s; display:flex; align-items:center; gap:6px; white-space:nowrap;">Monthly</button>
+                <button type="button" class="billing-opt" data-cycle="quarterly" style="position:relative; z-index:2; padding:0.65rem 1.5rem; border:none; background:none; font-weight:700; font-size:0.875rem; color:#64748b; cursor:pointer; border-radius:10px; transition:color 0.3s; display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                    Quarterly <span style="background:#dcfce7; color:#16a34a; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:4px;">Save {{ (int)($plans->first()->quarterly_discount ?? 10) }}%</span>
+                </button>
+                <button type="button" class="billing-opt" data-cycle="yearly" style="position:relative; z-index:2; padding:0.65rem 1.5rem; border:none; background:none; font-weight:700; font-size:0.875rem; color:#64748b; cursor:pointer; border-radius:10px; transition:color 0.3s; display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                    Yearly <span style="background:#fef3c7; color:#d97706; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:4px;">Save {{ (int)($plans->first()->yearly_discount ?? 20) }}%</span>
+                </button>
+                <div class="billing-slider" id="billingSlider" style="position:absolute; top:4px; left:4px; height:calc(100% - 8px); background:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:all 0.35s cubic-bezier(0.4,0,0.2,1); z-index:1;"></div>
+            </div>
+        </div>
+
+        {{-- Pricing Grid --}}
+        <div class="pricing-grid" style="padding-top: 2rem; padding-bottom: 6rem; margin-bottom: 2rem;">
             @foreach($plans as $plan)
-                <div class="pr-card {{ $plan->name === 'The Scaleup' ? 'popular' : '' }}" data-animate>
-                    @if($plan->name === 'The Scaleup')
+                <div class="pr-card {{ $plan->is_popular ? 'popular' : '' }}" data-animate>
+                    @if($plan->is_popular)
                         <div class="pr-tag">MOST POPULAR</div>
                     @endif
 
                     <div class="pr-name">{{ $plan->name }}</div>
-                    <span class="pr-desc">Best For: {{ $plan->best_for ?: ($plan->name === 'The Startup' ? 'Informative Websites' : ($plan->name === 'The Scaleup' ? 'WooCommerce Stores' : 'Mission-Critical Systems')) }}</span>
-                    <div class="pr-price">${{ number_format($plan->price, 0) }}<span>/year</span></div>
+                    <span class="pr-desc">Best For: {{ $plan->best_for ?: 'WordPress Sites' }}</span>
+                    <div class="pr-price"
+                         data-base="{{ $plan->price }}"
+                         data-quarterly-discount="{{ $plan->quarterly_discount ?? 10 }}"
+                         data-yearly-discount="{{ $plan->yearly_discount ?? 20 }}">
+                        $<span class="pr-amount">{{ number_format($plan->price, 0) }}</span><span class="pr-period">/mo</span>
+                    </div>
+                    <div class="pr-original-price" style="display:none; font-size:1rem; color:#94a3b8; text-decoration:line-through; margin-top:-1rem; margin-bottom:1rem; font-weight:600;">
+                        <span class="pr-original-amount"></span>
+                        <span class="pr-savings" style="display:inline-block; background:#dcfce7; color:#16a34a; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:6px; margin-left:8px; text-decoration:none;"></span>
+                    </div>
 
                     <ul class="pr-feat">
-                        @if($plan->name === 'The Startup')
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Standard Maintenance</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Basic Security</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Uptime Monitoring</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> 60 hours development support</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
-                        @elseif($plan->name === 'The Scaleup')
-                            <li><span class="material-icons-outlined">check_circle_outline</span> All features of The Startup</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Priority Support</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Daily Backups</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> 120 hour development support</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                        @if(is_array($plan->features) && count($plan->features))
+                            @foreach($plan->features as $feature)
+                                <li><span class="material-icons-outlined">check_circle_outline</span> {{ $feature }}</li>
+                            @endforeach
                         @else
-                            <li><span class="material-icons-outlined">check_circle_outline</span> All features of The Scaleup</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Ecommerce Optimization</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Dedicated Manager</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> 200 hours development support</li>
-                            <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @if($plan->name === 'The Startup')
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Standard Maintenance</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Basic Security</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Uptime Monitoring</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> {{ $plan->dev_hours ?: 60 }} hours development support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @elseif($plan->name === 'The Scaleup')
+                                <li><span class="material-icons-outlined">check_circle_outline</span> All features of The Startup</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Priority Support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Daily Backups</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> {{ $plan->dev_hours ?: 120 }} hour development support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @else
+                                <li><span class="material-icons-outlined">check_circle_outline</span> All features of The Scaleup</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Ecommerce Optimization</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Dedicated Manager</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> {{ $plan->dev_hours ?: 200 }} hours development support</li>
+                                <li><span class="material-icons-outlined">check_circle_outline</span> Monthly reports</li>
+                            @endif
                         @endif
                     </ul>
 
-                    <a href="{{ route('onboard', $plan->slug) }}" class="btn-secure {{ $plan->name === 'The Scaleup' ? 'btn-pop' : 'btn-outline' }}">
-                        @if($plan->name === 'The Scaleup')
+                    <a href="{{ route('onboard', $plan->slug) }}" class="btn-secure {{ $plan->is_popular ? 'btn-pop' : 'btn-outline' }} pr-cta-link" data-base-href="{{ route('onboard', $plan->slug) }}">
+                        @if($plan->is_popular)
                             <span class="material-icons-outlined">shopping_cart</span>
                         @endif
                         Secure WP Now
@@ -183,10 +212,10 @@
         font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em;
         white-space: nowrap; box-shadow: 0 4px 10px rgba(133, 77, 14, 0.2);
     }
-    .pr-name { font-size: 1.5rem; font-weight: 800; color: #010101; margin-bottom: 0.25rem; }
+    .pr-name { font-size: 1.21rem; font-weight: 800; color: #010101; margin-bottom: 0.25rem; }
     .pr-desc { font-size: 0.8125rem; font-style: italic; color: #64748b; margin-bottom: 1.5rem; display: block; }
-    .pr-price { font-size: 3rem; font-weight: 800; color: #010101; margin-bottom: 2rem; line-height: 1; }
-    .pr-price span { font-size: 1.125rem; color: #94a3b8; font-weight: 500; margin-left: 2px; }
+    .pr-price { font-size: 2.43rem; font-weight: 800; color: #010101; margin-bottom: 2rem; line-height: 1; }
+    .pr-price .pr-period { font-size: 1.125rem; color: #94a3b8; font-weight: 500; margin-left: 2px; }
     .pr-feat { list-style: none; padding: 0; margin: 0 0 2.5rem 0; display: flex; flex-direction: column; gap: 1rem; }
     .pr-feat li { display: flex; align-items: center; gap: 12px; font-size: 0.875rem; color: #475569; font-weight: 600;}
     .pr-feat li span { color: #f97316; font-size: 1rem; background: #fff7ed; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
@@ -250,3 +279,83 @@
     .spec-null { color: #cbd5e1; font-weight: 400; font-size: 1.125rem; }
 </style>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('billingToggle');
+    const slider = document.getElementById('billingSlider');
+    if (!toggle || !slider) return;
+    const buttons = toggle.querySelectorAll('.billing-opt');
+    const priceEls = document.querySelectorAll('.pr-price');
+    const ctaLinks = document.querySelectorAll('.pr-cta-link');
+
+    function updateSlider(btn) {
+        slider.style.width = btn.offsetWidth + 'px';
+        slider.style.left = btn.offsetLeft + 'px';
+    }
+
+    function updatePrices(cycle) {
+        const periodMap = { monthly: '/mo', quarterly: '/qtr', yearly: '/yr' };
+        const multiplierMap = { monthly: 1, quarterly: 3, yearly: 12 };
+
+        priceEls.forEach(el => {
+            const base = parseFloat(el.dataset.base);
+            const qDiscount = parseFloat(el.dataset.quarterlyDiscount) / 100;
+            const yDiscount = parseFloat(el.dataset.yearlyDiscount) / 100;
+            const amountEl = el.querySelector('.pr-amount');
+            const periodEl = el.querySelector('.pr-period');
+            const originalEl = el.parentElement.querySelector('.pr-original-price');
+            const originalAmtEl = originalEl ? originalEl.querySelector('.pr-original-amount') : null;
+            const savingsEl = originalEl ? originalEl.querySelector('.pr-savings') : null;
+
+            let finalPrice = base * multiplierMap[cycle];
+            let showOriginal = false;
+            let savings = 0;
+
+            if (cycle === 'quarterly') {
+                const original = base * 3;
+                finalPrice = Math.round(original * (1 - qDiscount));
+                savings = original - finalPrice;
+                showOriginal = true;
+                if (originalAmtEl) originalAmtEl.textContent = '$' + original.toLocaleString();
+            } else if (cycle === 'yearly') {
+                const original = base * 12;
+                finalPrice = Math.round(original * (1 - yDiscount));
+                savings = original - finalPrice;
+                showOriginal = true;
+                if (originalAmtEl) originalAmtEl.textContent = '$' + original.toLocaleString();
+            }
+
+            amountEl.textContent = finalPrice.toLocaleString();
+            periodEl.textContent = periodMap[cycle];
+            if (originalEl) originalEl.style.display = showOriginal ? 'block' : 'none';
+            if (savingsEl) savingsEl.textContent = showOriginal ? 'You save $' + savings.toLocaleString() : '';
+        });
+
+        ctaLinks.forEach(link => {
+            link.href = link.dataset.baseHref + '?billing_cycle=' + cycle;
+        });
+    }
+
+    const activeBtn = toggle.querySelector('.billing-opt.active');
+    if (activeBtn) updateSlider(activeBtn);
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            buttons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            this.style.color = '#0f172a';
+            buttons.forEach(b => { if (!b.classList.contains('active')) b.style.color = '#64748b'; });
+            updateSlider(this);
+            updatePrices(this.dataset.cycle);
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        const active = toggle.querySelector('.billing-opt.active');
+        if (active) updateSlider(active);
+    });
+});
+</script>
+@endpush

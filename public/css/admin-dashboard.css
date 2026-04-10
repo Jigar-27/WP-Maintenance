@@ -2,14 +2,14 @@
     background: #f7f8ff;
     border-radius: 18px;
     border: 1px solid #ececf4;
-    padding: 1.25rem;
+    padding: 2rem 2.5rem;
 }
 
 .im-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1.5rem;
 }
 
 .im-title {
@@ -47,9 +47,9 @@
 
 .im-top-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 232px;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 1.1rem;
+    margin-bottom: 1.1rem;
 }
 
 .im-card {
@@ -59,7 +59,8 @@
 }
 
 .im-chart-card {
-    padding: 1.1rem;
+    padding: 1.3rem 1.4rem;
+    border-left: 3px solid #f0612f;
 }
 
 .im-chart-head {
@@ -109,12 +110,14 @@
     height: 230px;
     display: flex;
     align-items: stretch;
-    gap: 0.55rem;
+    gap: 1rem;
+    justify-content: center;
 }
 
 .im-bar-col {
     flex: 1;
     min-width: 0;
+    max-width: 96px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -130,8 +133,8 @@
 .im-bar {
     width: 100%;
     min-height: 8px;
-    border-radius: 7px 7px 0 0;
-    background: #dce3f6;
+    border-radius: 8px 8px 0 0;
+    background: #c8d2ea;
 }
 
 .im-bar.active {
@@ -160,7 +163,7 @@
 }
 
 .im-kpi.primary {
-    border-left: 3px solid #f0612f;
+    border-left: 4px solid #f0612f;
 }
 
 .im-kpi-label {
@@ -233,8 +236,8 @@
 
 .im-bottom-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 232px;
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 1.1rem;
 }
 
 .im-table-card {

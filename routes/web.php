@@ -36,6 +36,7 @@ Route::post('/onboard/{plan}', [OnboardingController::class, 'store'])->name('on
 Route::get('/payment/{subscription}', [PaymentController::class, 'show'])->name('payment');
 Route::post('/payment/{subscription}', [PaymentController::class, 'process'])->name('payment.process');
 Route::get('/success/{subscription}', [PaymentController::class, 'success'])->name('success');
+Route::get('/invoice/{invoice}', [PaymentController::class, 'publicInvoice'])->name('invoice.public');
 
 // ─── Admin Routes ───────────────────────────────────────────
 Route::prefix('admin')->group(function () {
@@ -87,4 +88,23 @@ Route::prefix('admin')->group(function () {
             Route::delete('/users/{id}', [AdminController::class, 'userDelete'])->name('admin.users.delete');
         });
     });
+});
+
+// ─── Deployment Routes (InfinityFree Workaround) ───────────
+Route::get('/run-migrate', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return "<h1>Database Migrated Successfully!</h1>";
+});
+
+Route::get('/run-clear', function () {
+    \Illuminate\Support\Facades\Artisan::call('config:cache');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    return "<h1>All Caches Cleared!</h1>";
+});
+
+Route::get('/run-link', function () {
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    return "<h1>Storage Link Created!</h1>";
 });

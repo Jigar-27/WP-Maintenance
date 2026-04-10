@@ -185,6 +185,13 @@
 .status-expiring .status-dot { background: #ea580c; display: none; } /* Dot inside pill layout */
 .status-expiring::before { content: '!'; display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; background: #ea580c; color: white; border-radius: 50%; font-size: 10px; margin-right: 4px; }
 
+.status-pending .status-dot { background: #f59e0b; }
+.status-pending { color: #b45309; }
+.status-expired .status-dot { background: #ef4444; }
+.status-expired { color: #dc2626; }
+.status-cancelled .status-dot { background: #94a3b8; }
+.status-cancelled { color: #64748b; }
+
 /* Pagination Footer */
 .table-footer {
     display: flex;
@@ -305,7 +312,7 @@
 
                 <select class="filter-select" name="status">
                     <option value="">All Status</option>
-                    @foreach(['active' => 'Active', 'pending' => 'Pending', 'expired' => 'Expired', 'cancelled' => 'Cancelled'] as $statusValue => $statusLabel)
+                    @foreach(['active' => 'Active', 'expiring' => 'Expiring', 'pending' => 'Pending', 'expired' => 'Expired', 'cancelled' => 'Cancelled'] as $statusValue => $statusLabel)
                         <option value="{{ $statusValue }}" {{ (string) ($selectedStatus ?? '') === $statusValue ? 'selected' : '' }}>
                             {{ $statusLabel }}
                         </option>
@@ -338,32 +345,54 @@
             <tbody>
                 @forelse($subscriptions as $sub)
                 @php
-                    $isExpiring = $sub->end_date && $sub->end_date->diffInDays(now()) <= 30;
+                    // Dynamic status computation
+                    $now = \Carbon\Carbon::now();
+                    $daysLeft = $sub->end_date ? $now->diffInDays($sub->end_date, false) : 999;
+                    $clientSuspended = ($sub->client?->status === 'suspended');
+                    $endPassed = $sub->end_date && $sub->end_date->isPast();
+
+                    if ($clientSuspended) {
+                        $computedStatus = 'cancelled';
+                    } elseif ($endPassed) {
+                        $computedStatus = 'expired';
+                    } elseif ($daysLeft <= 15 && $sub->auto_renew) {
+                        $computedStatus = 'pending';
+                    } elseif ($daysLeft <= 15) {
+                        $computedStatus = 'expiring';
+                    } else {
+                        $computedStatus = 'active';
+                    }
                 @endphp
                 <tr>
                     <td>
                         <div class="client-col">
-                            <div class="client-avatar">{{ strtoupper(substr($sub->client->company_name ?? $sub->client->full_name ?? 'C', 0, 1)) }}</div>
+                            <div class="client-avatar">{{ strtoupper(substr($sub->client?->company_name ?? $sub->client?->full_name ?? 'C', 0, 1)) }}</div>
                             <div>
-                                <div class="client-name">{{ $sub->client->company_name ?? $sub->client->full_name }}</div>
+                                <div class="client-name">{{ $sub->client?->company_name ?? $sub->client?->full_name ?? 'Unknown Client' }}</div>
                                 <div class="client-id">#SUB-{{ str_pad($sub->id, 4, '0', STR_PAD_LEFT) }}</div>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <div class="domain-text">{{ parse_url($sub->client->website_url ?? 'https://unknown.com', PHP_URL_HOST) ?? $sub->client->website_url }}</div>
+                        <div class="domain-text">{{ parse_url($sub->client?->website_url ?? 'https://unknown.com', PHP_URL_HOST) ?? $sub->client?->website_url ?? '—' }}</div>
                     </td>
                     <td>
-                        <span class="plan-tier-badge">{{ strtoupper($sub->plan->name ?? 'STANDARD') }}</span>
+                        <span class="plan-tier-badge">{{ strtoupper($sub->plan?->name ?? 'STANDARD') }}</span>
                     </td>
                     <td>
-                        <div class="price-text">${{ number_format($sub->amount ?? $sub->plan->price, 0) }}</div>
+                        <div class="price-text">${{ number_format($sub->amount ?? $sub->plan?->price ?? 0, 0) }}</div>
                     </td>
                     <td>
-                        @if($isExpiring || strtolower($sub->status) == 'pending')
-                            <div class="status-indicator status-expiring">EXPIRING</div>
-                        @else
+                        @if($computedStatus === 'active')
                             <div class="status-indicator status-active"><span class="status-dot"></span>Active</div>
+                        @elseif($computedStatus === 'expiring')
+                            <div class="status-indicator status-expiring">EXPIRING</div>
+                        @elseif($computedStatus === 'pending')
+                            <div class="status-indicator status-pending"><span class="status-dot"></span>Pending</div>
+                        @elseif($computedStatus === 'expired')
+                            <div class="status-indicator status-expired"><span class="status-dot"></span>Expired</div>
+                        @elseif($computedStatus === 'cancelled')
+                            <div class="status-indicator status-cancelled"><span class="status-dot"></span>Cancelled</div>
                         @endif
                     </td>
                 </tr>

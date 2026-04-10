@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use App\Models\Client;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -10,7 +12,13 @@ class HomeController extends Controller
     public function index()
     {
         $plans = Plan::where('is_active', true)->orderBy('sort_order')->get();
-        return view('frontend.landing', compact('plans'));
+
+        // Dynamic stats for the trust band
+        $activeClients = Client::where('status', 'active')->count();
+        $activeSubs = Subscription::where('status', 'active')->count();
+        $totalSitesMonitored = max($activeClients, $activeSubs, 1); // at least show 1
+
+        return view('frontend.landing', compact('plans', 'activeClients', 'activeSubs', 'totalSitesMonitored'));
     }
 
     public function plans()

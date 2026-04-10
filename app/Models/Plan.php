@@ -8,6 +8,7 @@ class Plan extends Model
 {
     protected $fillable = [
         'name', 'slug', 'description', 'best_for', 'price',
+        'quarterly_discount', 'yearly_discount',
         'billing_cycle', 'features', 'dev_hours', 'is_popular',
         'is_active', 'sort_order',
     ];
@@ -15,6 +16,8 @@ class Plan extends Model
     protected $casts = [
         'features' => 'array',
         'price' => 'decimal:2',
+        'quarterly_discount' => 'decimal:2',
+        'yearly_discount' => 'decimal:2',
         'is_popular' => 'boolean',
         'is_active' => 'boolean',
     ];
