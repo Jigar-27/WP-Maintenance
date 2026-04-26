@@ -8,19 +8,14 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Client\ClientController;
 
-Route::get('/login', [AdminController::class, 'login'])->name('login');
-Route::post('/login', [AdminController::class, 'authenticate']);
-Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+// Auth redirects to admin login by default
+Route::get('/login', fn() => redirect()->route('admin.login'))->name('login');
 
-// ─── Client Routes ──────────────────────────────────────────
-Route::middleware(['auth', \App\Http\Middleware\IsClient::class])->prefix('client')->group(function () {
-    Route::get('/', fn() => redirect()->route('client.dashboard'));
-    Route::get('/dashboard', [ClientController::class, 'dashboard'])->name('client.dashboard');
-});
+
 
 // ─── Frontend Routes ────────────────────────────────────────
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/plans', [HomeController::class, 'plans'])->name('plans');
+Route::get('/pricing', [HomeController::class, 'plans'])->name('plans');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -78,8 +73,15 @@ Route::prefix('admin')->group(function () {
             Route::post('/subscriptions', [AdminController::class, 'subscriptionStore'])->name('admin.subscriptions.store');
             Route::get('/subscriptions/{id}/edit', [AdminController::class, 'subscriptionEdit'])->name('admin.subscriptions.edit');
             Route::put('/subscriptions/{id}', [AdminController::class, 'subscriptionUpdate'])->name('admin.subscriptions.update');
+            Route::get('/plans', [AdminController::class, 'plans'])->name('admin.plans');
             Route::get('/plans/{id}/edit', [AdminController::class, 'planEdit'])->name('admin.plans.edit');
             Route::put('/plans/{id}', [AdminController::class, 'planUpdate'])->name('admin.plans.update');
+            Route::put('/plans/{id}', [AdminController::class, 'planUpdate'])->name('admin.plans.update');
+    Route::post('/plan-features', [AdminController::class, 'planFeatureStore'])->name('admin.plan-features.store');
+
+            Route::put('/plan-features/{id}', [AdminController::class, 'planFeatureUpdate'])->name('admin.plan-features.update');
+            Route::delete('/plan-features/{id}', [AdminController::class, 'planFeatureDelete'])->name('admin.plan-features.delete');
+
 
             Route::get('/users/create', [AdminController::class, 'userCreate'])->name('admin.users.create');
             Route::post('/users', [AdminController::class, 'userStore'])->name('admin.users.store');
@@ -90,7 +92,6 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-// ─── Deployment Routes (InfinityFree Workaround) ───────────
 Route::get('/run-migrate', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     return "<h1>Database Migrated Successfully!</h1>";

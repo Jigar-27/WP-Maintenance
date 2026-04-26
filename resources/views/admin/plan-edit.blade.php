@@ -32,29 +32,8 @@
                 @error('price') <div class="form-error">{{ $message }}</div> @enderror
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="billing_cycle">Billing Cycle *</label>
-                <select class="form-select" id="billing_cycle" name="billing_cycle" required>
-                    @foreach(['monthly' => 'Monthly', 'quarterly' => 'Quarterly', 'yearly' => 'Yearly'] as $key => $label)
-                        <option value="{{ $key }}" {{ old('billing_cycle', $plan->billing_cycle) === $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
-                </select>
-                @error('billing_cycle') <div class="form-error">{{ $message }}</div> @enderror
-            </div>
+            {{-- Billing Cycle and Discounts removed as per simplified annual structure --}}
 
-            <div class="form-group">
-                <label class="form-label" for="quarterly_discount">Quarterly Discount %</label>
-                <input type="number" step="0.01" min="0" max="100" class="form-input" id="quarterly_discount" name="quarterly_discount" value="{{ old('quarterly_discount', $plan->quarterly_discount ?? 10) }}">
-                <div class="form-hint">Discount applied when clients choose quarterly billing</div>
-                @error('quarterly_discount') <div class="form-error">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="yearly_discount">Yearly Discount %</label>
-                <input type="number" step="0.01" min="0" max="100" class="form-input" id="yearly_discount" name="yearly_discount" value="{{ old('yearly_discount', $plan->yearly_discount ?? 20) }}">
-                <div class="form-hint">Discount applied when clients choose yearly billing</div>
-                @error('yearly_discount') <div class="form-error">{{ $message }}</div> @enderror
-            </div>
 
             <div class="form-group">
                 <label class="form-label" for="best_for">Best For</label>

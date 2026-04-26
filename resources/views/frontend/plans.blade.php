@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'Choose Your Digital Guardian Plan')
+@section('title', 'Simple & Transparent Pricing')
 @section('meta_description', 'Select the service level that fits your business needs. All plans include 24/7 security and monthly reporting.')
 
 @section('content')
@@ -8,23 +8,12 @@
     <div class="fp-container">
         {{-- Hero Header --}}
         <div class="text-center mb-32" data-animate>
-            <h1 class="display-lg" style="color: #010101; margin-bottom: 2rem; font-weight: 800; line-height: 1.1; font-size: 3.25rem;">Choose Your Digital <br> Guardian Plan</h1>
+            <h1 class="display-lg" style="color: #010101; margin-bottom: 2rem; font-weight: 800; line-height: 1.1; font-size: 3.25rem;">Simple & Transparent <br> Pricing</h1>
             <p class="body-lg text-muted" style="max-width: 600px; margin: 0 auto; line-height: 1.6; font-size: 0.95rem;">Select the service level that fits your business needs. All plans include 24/7 security and monthly reporting.</p>
         </div>
 
-        {{-- Billing Cycle Toggle --}}
-        <div style="display:flex; justify-content:center; margin-bottom:3rem;">
-            <div class="billing-toggle" id="billingToggle" style="display:inline-flex; position:relative; background:#f1f5f9; border-radius:12px; padding:4px; border:1px solid #e2e8f0;">
-                <button type="button" class="billing-opt active" data-cycle="monthly" style="position:relative; z-index:2; padding:0.65rem 1.5rem; border:none; background:none; font-weight:700; font-size:0.875rem; color:#64748b; cursor:pointer; border-radius:10px; transition:color 0.3s; display:flex; align-items:center; gap:6px; white-space:nowrap;">Monthly</button>
-                <button type="button" class="billing-opt" data-cycle="quarterly" style="position:relative; z-index:2; padding:0.65rem 1.5rem; border:none; background:none; font-weight:700; font-size:0.875rem; color:#64748b; cursor:pointer; border-radius:10px; transition:color 0.3s; display:flex; align-items:center; gap:6px; white-space:nowrap;">
-                    Quarterly <span style="background:#dcfce7; color:#16a34a; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:4px;">Save {{ (int)($plans->first()->quarterly_discount ?? 10) }}%</span>
-                </button>
-                <button type="button" class="billing-opt" data-cycle="yearly" style="position:relative; z-index:2; padding:0.65rem 1.5rem; border:none; background:none; font-weight:700; font-size:0.875rem; color:#64748b; cursor:pointer; border-radius:10px; transition:color 0.3s; display:flex; align-items:center; gap:6px; white-space:nowrap;">
-                    Yearly <span style="background:#fef3c7; color:#d97706; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:4px;">Save {{ (int)($plans->first()->yearly_discount ?? 20) }}%</span>
-                </button>
-                <div class="billing-slider" id="billingSlider" style="position:absolute; top:4px; left:4px; height:calc(100% - 8px); background:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:all 0.35s cubic-bezier(0.4,0,0.2,1); z-index:1;"></div>
-            </div>
-        </div>
+        {{-- Billing Cycle Toggle Hidden (Only Yearly) --}}
+
 
         {{-- Pricing Grid --}}
         <div class="pricing-grid" style="padding-top: 2rem; padding-bottom: 6rem; margin-bottom: 2rem;">
@@ -36,16 +25,11 @@
 
                     <div class="pr-name">{{ $plan->name }}</div>
                     <span class="pr-desc">Best For: {{ $plan->best_for ?: 'WordPress Sites' }}</span>
-                    <div class="pr-price"
-                         data-base="{{ $plan->price }}"
-                         data-quarterly-discount="{{ $plan->quarterly_discount ?? 10 }}"
-                         data-yearly-discount="{{ $plan->yearly_discount ?? 20 }}">
-                        $<span class="pr-amount">{{ number_format($plan->price, 0) }}</span><span class="pr-period">/mo</span>
+                    <div class="pr-price">
+                            <div class="pr-price">$<span>{{ number_format($plan->price, 0) }}</span><span class="price-period">/yr</span></div>
+
                     </div>
-                    <div class="pr-original-price" style="display:none; font-size:1rem; color:#94a3b8; text-decoration:line-through; margin-top:-1rem; margin-bottom:1rem; font-weight:600;">
-                        <span class="pr-original-amount"></span>
-                        <span class="pr-savings" style="display:inline-block; background:#dcfce7; color:#16a34a; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:6px; margin-left:8px; text-decoration:none;"></span>
-                    </div>
+
 
                     <ul class="pr-feat">
                         @if(is_array($plan->features) && count($plan->features))
@@ -75,18 +59,21 @@
                         @endif
                     </ul>
 
-                    <a href="{{ route('onboard', $plan->slug) }}" class="btn-secure {{ $plan->is_popular ? 'btn-pop' : 'btn-outline' }} pr-cta-link" data-base-href="{{ route('onboard', $plan->slug) }}">
+                    <a href="{{ route('onboard', ['plan' => $plan->slug, 'billing_cycle' => 'yearly']) }}" class="btn-secure {{ $plan->is_popular ? 'btn-pop' : 'btn-outline' }} pr-cta-link">
                         @if($plan->is_popular)
                             <span class="material-icons-outlined">shopping_cart</span>
                         @endif
                         Secure WP Now
                     </a>
+
                     <a href="{{ route('terms') }}" class="pr-sla">
                         Service-level agreement <span class="material-icons-outlined" style="font-size: 0.8125rem;">open_in_new</span>
                     </a>
                 </div>
             @endforeach
         </div>
+
+
 
         {{-- Active Concierge Maintenance Report Banner --}}
         <div class="monitoring-banner" style="margin-bottom: 4rem;" data-animate>
@@ -142,7 +129,7 @@
         </div>
 
         {{-- Technical Specs --}}
-        <div class="mb-32" data-animate style="padding-top: 4rem;">
+        <div id="technical-specs" class="mb-32" data-animate style="padding-top: 4rem;">
             <div class="text-center mb-12">
                 <h2 class="display-sm" style="color: #0f172a; margin-bottom: 0.75rem;">Compare Technical Specifications</h2>
                 <div style="width: 50px; height: 3px; background: #f97316; margin: 0 auto; border-radius: 2px;"></div>
@@ -160,41 +147,54 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($techFeatures as $feature)
                             <tr>
-                                <td><div class="spec-feature-name">Core Updates <span class="material-icons-outlined spec-info-icon" title="Automated WordPress core and plugin updates">info</span></div></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
-                                <td class="spec-highlight"><span class="material-icons-outlined spec-check">check</span></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
+                                <td>
+                                    <div class="spec-feature-name">
+                                        {{ $feature->name }}
+                                        @if($feature->description)
+                                        <span class="material-icons-outlined spec-info-icon" title="{{ $feature->description }}">info</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                    @if($feature->startup)
+                                        <span class="material-icons-outlined spec-check">check_circle</span>
+                                    @else
+                                        <span class="spec-null">—</span>
+                                    @endif
+                                </td>
+                                <td class="spec-highlight">
+                                    @if($feature->scaleup)
+                                        <span class="material-icons-outlined spec-check">check_circle</span>
+                                    @else
+                                        <span class="spec-null">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($feature->enterprise)
+                                        <span class="material-icons-outlined spec-check">check_circle</span>
+                                    @else
+                                        <span class="spec-null">—</span>
+                                    @endif
+                                </td>
                             </tr>
-                            <tr>
-                                <td><div class="spec-feature-name">Safe Staging <span class="material-icons-outlined spec-info-icon" title="Test updates in a sandboxed environment">info</span></div></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
-                                <td class="spec-highlight"><span class="material-icons-outlined spec-check">check</span></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="spec-feature-name">WAF (Web Application Firewall) <span class="material-icons-outlined spec-info-icon" title="Enterprise protection">info</span></div></td>
-                                <td><span class="spec-null">—</span></td>
-                                <td class="spec-highlight"><span class="material-icons-outlined spec-check">check</span></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="spec-feature-name">PHP Optimization <span class="material-icons-outlined spec-info-icon" title="Continuous performance tuning">info</span></div></td>
-                                <td><span class="spec-null">—</span></td>
-                                <td class="spec-highlight"><span class="material-icons-outlined spec-check">check</span></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="spec-feature-name">Visual Regression Testing <span class="material-icons-outlined spec-info-icon" title="Design integrity protection">info</span></div></td>
-                                <td><span class="spec-null">—</span></td>
-                                <td class="spec-highlight"><span class="spec-null">—</span></td>
-                                <td><span class="material-icons-outlined spec-check">check</span></td>
-                            </tr>
+                            @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr style="background: #f8fafc; font-weight: 900;">
+                                <td style="color: #ea580c; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; padding-left: 2.5rem;">Support Hours</td>
+                                @foreach($plans as $plan)
+                                    <td class="{{ $plan->is_popular ? 'spec-highlight' : '' }}" style="text-align: center;">{{ $plan->dev_hours ?: 0 }} hrs</td>
+                                @endforeach
+                            </tr>
+                        </tfoot>
+
                     </table>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
@@ -226,9 +226,9 @@
         margin-top: auto; transition: 0.2s; font-size: 0.875rem;
     }
     .btn-outline { border: 1.5px solid #854d0e; color: #854d0e; background: transparent; }
-    .btn-outline:hover { background: #fffbeb; }
-    .btn-pop { background: #ea580c; color: white; border: none; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3); }
-    .btn-pop:hover { background: #c2410c; }
+    .btn-pop { background: #ea580c; color: white !important; border: none; box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35); transition: all 0.2s ease; }
+    .btn-pop:hover { color: white !important; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(234, 88, 12, 0.45); }
+    .btn-pop span { color: white !important; }
     .pr-sla { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 1.5rem; text-decoration: none; }
 
     /* Monitoring Banner */
@@ -249,7 +249,6 @@
         font-size: 0.6875rem; font-weight: 900; letter-spacing: 0.1em; text-decoration: none;
         transition: all 0.2s;
     }
-    .btn-sample:hover { background: #bfdbfe; transform: translateY(-1px); }
 
     /* Our Process Flow */
     .process-steps { position: relative; padding-top: 2rem; }
@@ -263,7 +262,6 @@
     }
     .ps-label { font-size: 0.6875rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
     .ps-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; font-weight: 500; max-width: 160px; margin: 0 auto; }
-    .process-step:hover .ps-icon { background: white; border-color: #f97316; color: #f97316; transform: translateY(-2px); }
 
     /* Technical Specs (re-style for consistency) */
     .spec-table-container { background: white; border: 1px solid #f1f5f9; border-radius: 32px; overflow: hidden; margin-top: 2rem; }
@@ -283,79 +281,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const toggle = document.getElementById('billingToggle');
-    const slider = document.getElementById('billingSlider');
-    if (!toggle || !slider) return;
-    const buttons = toggle.querySelectorAll('.billing-opt');
-    const priceEls = document.querySelectorAll('.pr-price');
-    const ctaLinks = document.querySelectorAll('.pr-cta-link');
-
-    function updateSlider(btn) {
-        slider.style.width = btn.offsetWidth + 'px';
-        slider.style.left = btn.offsetLeft + 'px';
-    }
-
-    function updatePrices(cycle) {
-        const periodMap = { monthly: '/mo', quarterly: '/qtr', yearly: '/yr' };
-        const multiplierMap = { monthly: 1, quarterly: 3, yearly: 12 };
-
-        priceEls.forEach(el => {
-            const base = parseFloat(el.dataset.base);
-            const qDiscount = parseFloat(el.dataset.quarterlyDiscount) / 100;
-            const yDiscount = parseFloat(el.dataset.yearlyDiscount) / 100;
-            const amountEl = el.querySelector('.pr-amount');
-            const periodEl = el.querySelector('.pr-period');
-            const originalEl = el.parentElement.querySelector('.pr-original-price');
-            const originalAmtEl = originalEl ? originalEl.querySelector('.pr-original-amount') : null;
-            const savingsEl = originalEl ? originalEl.querySelector('.pr-savings') : null;
-
-            let finalPrice = base * multiplierMap[cycle];
-            let showOriginal = false;
-            let savings = 0;
-
-            if (cycle === 'quarterly') {
-                const original = base * 3;
-                finalPrice = Math.round(original * (1 - qDiscount));
-                savings = original - finalPrice;
-                showOriginal = true;
-                if (originalAmtEl) originalAmtEl.textContent = '$' + original.toLocaleString();
-            } else if (cycle === 'yearly') {
-                const original = base * 12;
-                finalPrice = Math.round(original * (1 - yDiscount));
-                savings = original - finalPrice;
-                showOriginal = true;
-                if (originalAmtEl) originalAmtEl.textContent = '$' + original.toLocaleString();
-            }
-
-            amountEl.textContent = finalPrice.toLocaleString();
-            periodEl.textContent = periodMap[cycle];
-            if (originalEl) originalEl.style.display = showOriginal ? 'block' : 'none';
-            if (savingsEl) savingsEl.textContent = showOriginal ? 'You save $' + savings.toLocaleString() : '';
-        });
-
-        ctaLinks.forEach(link => {
-            link.href = link.dataset.baseHref + '?billing_cycle=' + cycle;
-        });
-    }
-
-    const activeBtn = toggle.querySelector('.billing-opt.active');
-    if (activeBtn) updateSlider(activeBtn);
-
-    buttons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            buttons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            this.style.color = '#0f172a';
-            buttons.forEach(b => { if (!b.classList.contains('active')) b.style.color = '#64748b'; });
-            updateSlider(this);
-            updatePrices(this.dataset.cycle);
-        });
-    });
-
-    window.addEventListener('resize', () => {
-        const active = toggle.querySelector('.billing-opt.active');
-        if (active) updateSlider(active);
-    });
+    // Plans page effects
 });
 </script>
 @endpush

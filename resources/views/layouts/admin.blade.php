@@ -58,17 +58,28 @@
                         Upcoming Dues
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.plans') }}" class="sidebar-link {{ request()->routeIs('admin.plans*') ? 'active' : '' }}">
+                        <span class="material-icons-outlined">settings_suggest</span>
+                        Plans & Features
+                    </a>
+                </li>
             </ul>
+
 
             <div class="sidebar-footer">
                 <div class="sidebar-user-card">
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}&background=fce6da&color=b02f00" class="sidebar-user-img" alt="Avatar">
                     <div class="sidebar-user-meta">
                         <div class="sidebar-user-name">{{ auth()->user()->name ?? 'Agency Admin' }}</div>
-                        <form action="{{ route('admin.logout') }}" method="POST" class="logout-form">
-                            @csrf
-                            <button type="submit" class="logout-link">Sign Out</button>
-                        </form>
+                        <div style="display:flex; gap: 10px; align-items:center;">
+                            <a href="{{ route('admin.profile.edit') }}" class="logout-link" style="color: var(--cp-primary);">Security</a>
+                            <span style="color: #475569; font-size: 10px;">•</span>
+                            <form action="{{ route('admin.logout') }}" method="POST" class="logout-form">
+                                @csrf
+                                <button type="submit" class="logout-link">Sign Out</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 

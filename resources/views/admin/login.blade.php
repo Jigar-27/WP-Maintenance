@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Portal Login — WP Maintenance</title>
+    <title>Agency Console Login — United WP agency</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
@@ -91,8 +91,8 @@
 
     <div class="login-wrap">
         <div class="login-visual">
-            <h1 class="v-title">Secure.<br>Optimized.<br><span>Monitored.</span></h1>
-            <p class="v-desc">Log in to your Client Portal to manage your premium WordPress ecosystem, infrastructure analytics, and dedicated 24/7 concierge support.</p>
+            <h1 class="v-title">Agency Console.<br>Fleet Management.<br><span>Secured.</span></h1>
+            <p class="v-desc">Access the centralized command center for United WP agency. Manage fleet infrastructure, security protocols, and client orchestration from a single administrative interface.</p>
             
             <div class="v-stats">
                 <div class="v-stat">
@@ -109,8 +109,8 @@
         <div class="login-form-box">
             <div class="lf-head">
                 <div class="lf-icon"><span class="material-icons-outlined" style="font-size:1.5rem;">lock</span></div>
-                <h2 class="lf-title">Client Portal</h2>
-                <div class="lf-sub">Access your dedicated management dashboard.</div>
+                <h2 class="lf-title">Agency Console</h2>
+                <div class="lf-sub">Administrative access for United WP agency staff.</div>
             </div>
 
             @if($errors->any())
@@ -130,6 +130,9 @@
                 <div class="form-group" style="margin-bottom:0.5rem">
                     <label class="form-label" for="password">Password</label>
                     <input type="password" class="form-input" id="password" name="password" required placeholder="Enter your secure password">
+                    <div style="text-align: right; margin-top: 8px;">
+                        <a href="mailto:support@unitedwpagency.com?subject=Password%20Reset%20Request" style="font-size: 0.75rem; color: #64748b; text-decoration: none; font-weight: 600;">Forgot Password?</a>
+                    </div>
                 </div>
                 
                 <div class="form-row">

@@ -87,7 +87,8 @@
                 <tr style="border-bottom:1px solid #edf0f7;">
                     <td style="padding:1rem;">
                         <div style="font-weight:800; color:#1c2842;">{{ $invoice->subscription->plan->name ?? 'Maintenance Plan' }}</div>
-                        <div style="font-size:0.8rem; color:#7b7f92;">Monthly subscription — {{ $invoice->subscription->start_date->format('M d') }} to {{ $invoice->subscription->end_date->format('M d, Y') }}</div>
+                        <div style="font-size:0.8rem; color:#7b7f92;">Annual subscription — {{ $invoice->subscription->start_date->format('M d') }} to {{ $invoice->subscription->end_date->format('M d, Y') }}</div>
+
                     </td>
                     <td style="text-align:right; padding:1rem; font-weight:800; color:#1c2842;">${{ number_format($invoice->subtotal, 2) }}</td>
                 </tr>

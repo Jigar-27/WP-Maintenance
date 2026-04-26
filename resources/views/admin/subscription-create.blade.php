@@ -33,7 +33,7 @@
                     <option value="">Select plan</option>
                     @foreach($plans as $plan)
                         <option value="{{ $plan->id }}" {{ (string) old('plan_id') === (string) $plan->id ? 'selected' : '' }}>
-                            {{ $plan->name }} — ${{ number_format($plan->price, 2) }}/{{ $plan->billing_cycle }}
+                            {{ $plan->name }} — ${{ number_format($plan->price * 12, 2) }}/yr
                         </option>
                     @endforeach
                 </select>
@@ -48,9 +48,10 @@
 
             <div class="form-group">
                 <label class="form-label" for="end_date">End Date *</label>
-                <input type="date" class="form-input" id="end_date" name="end_date" value="{{ old('end_date', now()->addMonth()->format('Y-m-d')) }}" required>
+                <input type="date" class="form-input" id="end_date" name="end_date" value="{{ old('end_date', now()->addYear()->format('Y-m-d')) }}" required>
                 @error('end_date') <div class="form-error">{{ $message }}</div> @enderror
             </div>
+
 
             <div class="form-group">
                 <label class="form-label" for="status">Status *</label>

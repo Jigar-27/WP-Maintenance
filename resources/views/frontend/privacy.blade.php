@@ -1,35 +1,36 @@
 @extends('layouts.frontend')
-@section('title', 'Privacy Policy')
+@section('title', 'Privacy Policy — United WPAgency')
 
 @push('styles')
 <style>
 /* Base Variables & Reset */
 .privacy-page-wrapper {
-    background-color: #f8fafc;
+    background-color: #ffffff;
     color: #334155;
     font-family: 'Inter', -apple-system, sans-serif;
     padding-bottom: 6rem;
 }
 
 .privacy-container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 1.5rem 1.5rem 4rem 1.5rem;
+    padding: 3rem 1.5rem;
 }
 
 /* Header Section */
 .priv-header {
     margin-bottom: 2rem;
+    text-align: center;
 }
 .priv-badge {
     display: inline-block;
-    background-color: #e0e7ff;
-    color: #4f46e5;
-    font-size: 0.6875rem;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    padding: 0.35rem 0.75rem;
+    padding: 0.4rem 1rem;
     border-radius: 4px;
     margin-bottom: 1.5rem;
 }
@@ -41,229 +42,106 @@
     line-height: 1.1;
     letter-spacing: -0.02em;
 }
-.priv-title span {
-    color: #ea580c;
-}
 .priv-desc {
     font-size: 1.125rem;
     color: #64748b;
     line-height: 1.6;
-    max-width: 600px;
-    margin: 0 0 2rem 0;
-}
-.priv-date {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    font-weight: 700;
-    color: #0f172a;
-}
-.priv-date .material-icons-outlined {
-    font-size: 18px;
-    color: #ea580c;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
-/* Layout Grid */
-.priv-grid {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 4rem;
-    margin-bottom: 4rem;
-}
-@media (max-width: 768px) {
-    .priv-grid { grid-template-columns: 1fr; gap: 1rem; }
-}
-
-/* Left Column Numbers */
-.priv-num {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #cbd5e1;
-    position: sticky;
-    top: 2rem;
-    margin: 0;
-    line-height: 1.2;
-}
-
-/* Right Column Content */
-.priv-sec-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 1rem 0;
-}
-.priv-text {
-    font-size: 0.9375rem;
-    color: #475569;
-    line-height: 1.7;
+/* Content Layout */
+.priv-content-block {
     margin-bottom: 2rem;
 }
-
-/* Section specific styling */
-.collection-box {
-    background-color: #eff6ff;
-    border-radius: 12px;
-    padding: 2rem;
+.p-sec-num {
+    font-size: 0.875rem;
+    font-weight: 900;
+    color: #ea580c;
+    margin-bottom: 0.75rem;
+    display: block;
+    letter-spacing: 0.05em;
 }
-.collection-list {
+.p-sec-title {
+    font-size: 1.75rem;
+    font-weight: 850;
+    color: #0f172a;
+    margin: 0 0 1.5rem 0;
+}
+.p-sec-text {
+    font-size: 1.0625rem;
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+/* List Style */
+.p-list {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 2rem 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-.collection-list li {
+.p-list li {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.875rem;
+    gap: 12px;
+    font-size: 1rem;
     font-weight: 600;
     color: #1e293b;
+    background: #f8fafc;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #edf2f7;
 }
-.collection-list .material-icons-outlined {
+.p-list li::before {
+    content: 'check_circle';
+    font-family: 'Material Icons';
     color: #ea580c;
     font-size: 20px;
 }
 
-/* Two Cards Grid */
-.cards-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-@media (max-width: 640px) {
-    .cards-grid { grid-template-columns: 1fr; }
-}
-.priv-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -2px rgba(0,0,0,0.02);
-}
-.pc-icon {
-    color: #ea580c;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-.pc-title {
-    font-size: 0.9375rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 0.5rem 0;
-}
-.pc-desc {
-    font-size: 0.8125rem;
-    color: #64748b;
-    line-height: 1.5;
-    margin: 0;
-}
-
-/* Dark Box */
-.zero-leak-box {
-    background-color: #0f172a;
-    border-radius: 12px;
-    padding: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-}
-@media (max-width: 640px) {
-    .zero-leak-box { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-}
-.zl-title {
-    font-size: 1.125rem;
-    font-weight: 800;
-    margin: 0 0 0.5rem 0;
-}
-.zl-desc {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    margin: 0;
-    max-width: 300px;
-    line-height: 1.5;
-}
-.zl-icon {
-    font-size: 3rem;
-    color: #334155;
-}
-
-/* Rights List */
-.rights-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-.right-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-}
-.ri-icon-wrap {
-    width: 40px;
-    height: 40px;
-    background-color: #fff7ed;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.ri-icon-wrap .material-icons-outlined {
-    color: #ea580c;
-    font-size: 20px;
-}
-.ri-title {
-    font-size: 0.9375rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 0.25rem 0;
-}
-.ri-desc {
-    font-size: 0.8125rem;
-    color: #64748b;
-    margin: 0;
-    line-height: 1.5;
-}
-
-/* Bottom Banner */
-.priv-banner {
+/* Footnote/Contact */
+.priv-contact-box {
     background-color: #0f172a;
     border-radius: 20px;
     padding: 4rem 2rem;
     text-align: center;
-    margin-top: 2rem;
-}
-.pb-title {
-    font-size: 1.75rem;
-    font-weight: 800;
     color: white;
-    margin: 0 0 1rem 0;
+    margin-top: 6rem;
 }
-.pb-desc {
-    font-size: 0.9375rem;
+.pc-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white;
+}
+.pc-desc {
+    font-size: 1rem;
     color: #94a3b8;
-    max-width: 400px;
-    margin: 0 auto 2rem auto;
+    margin-bottom: 2rem;
     line-height: 1.6;
 }
-.btn-email-white {
+.pc-email {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    background-color: white;
-    color: #0f172a;
-    padding: 0.875rem 2rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
+    gap: 0.75rem;
+    background: #ea580c;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 99px;
     font-weight: 800;
     text-decoration: none;
-    transition: background-color 0.2s;
+    transition: transform 0.2s;
 }
-.btn-email-white:hover {
-    background-color: #f1f5f9;
+.pc-email:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .priv-title { font-size: 2.75rem; }
 }
 </style>
 @endpush
@@ -273,125 +151,55 @@
     <div class="privacy-container">
         
         <!-- Header -->
-        <div class="priv-header">
-            <div class="priv-badge">Legal Framework</div>
-            <h1 class="priv-title">Privacy <span>Policy.</span></h1>
-            <p class="priv-desc">Your trust is our most valuable asset. This policy outlines how WP Maintenance handles your data with the precision and care of a digital custodian.</p>
-            <div class="priv-date">
-                <span class="material-icons-outlined">schedule</span>
-                Last Updated: May 24, 2024
-            </div>
-        </div>
+        <header class="priv-header">
+            <div class="priv-badge">Data Protection</div>
+            <h1 class="priv-title">Privacy Policy</h1>
+            <p class="priv-desc">We are committed to protecting your privacy and ensuring the security of your data through architectural excellence and transparency.</p>
+        </header>
 
-        <!-- Section 1 -->
-        <div class="priv-grid">
-            <div class="priv-num">01. Collection</div>
-            <div>
-                <h2 class="priv-sec-title">Data Gathering & Sources</h2>
-                <p class="priv-text">We collect information necessary to provide high-end WordPress concierge services. This includes personal identifiers (name, email), billing information, and technical credentials required for site maintenance.</p>
-                <div class="collection-box">
-                    <ul class="collection-list">
-                        <li>
-                            <span class="material-icons-outlined">check_circle</span>
-                            Account Details & Contact Information
-                        </li>
-                        <li>
-                            <span class="material-icons-outlined">check_circle</span>
-                            Server & CMS Administrative Credentials
-                        </li>
-                        <li>
-                            <span class="material-icons-outlined">check_circle</span>
-                            Usage Logs & Performance Metadata
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <!-- Section 1: Overview -->
+        <article class="priv-content-block">
+            <span class="p-sec-num">01. OVERVIEW</span>
+            <h2 class="p-sec-title">Operational Context</h2>
+            <p class="p-sec-text">This Privacy Policy describes how ReUnited (“we”, “us”, or “our”) collects, uses, and discloses your personal information when you use our website and services.</p>
+        </article>
 
-        <!-- Section 2 -->
-        <div class="priv-grid">
-            <div class="priv-num">02. Utilization</div>
-            <div>
-                <h2 class="priv-sec-title">How We Use Your Data</h2>
-                <p class="priv-text">Processing is limited to the fulfillment of our maintenance contract. Your data is used exclusively to ensure the security, stability, and speed of your digital properties.</p>
-                <div class="cards-grid">
-                    <div class="priv-card">
-                        <div class="material-icons-outlined pc-icon">bolt</div>
-                        <h3 class="pc-title">Service Optimization</h3>
-                        <p class="pc-desc">Real-time monitoring and proactive performance tuning.</p>
-                    </div>
-                    <div class="priv-card">
-                        <div class="material-icons-outlined pc-icon">security</div>
-                        <h3 class="pc-title">Security Audits</h3>
-                        <p class="pc-desc">Scanning for vulnerabilities and preventing unauthorized access.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Section 2: Collection (User requested 'No Professional Advice' header) -->
+        <article class="priv-content-block">
+            <span class="p-sec-num">02. COLLECTION</span>
+            <h2 class="p-sec-title">No Professional Advice</h2>
+            <p class="p-sec-text">We collect information that you provide directly to us, such as when you subscribe to our newsletter or contact our support team. This may include:</p>
+            <ul class="p-list">
+                <li>Name and contact information</li>
+                <li>Professional credentials and affiliations</li>
+                <li>Communication preferences and history</li>
+                <li>Technical data including IP addresses and browser types</li>
+            </ul>
+        </article>
 
-        <!-- Section 3 -->
-        <div class="priv-grid">
-            <div class="priv-num">03. Safeguarding</div>
-            <div>
-                <h2 class="priv-sec-title">Encryption & Protection</h2>
-                <p class="priv-text">We employ industry-standard AES-256 encryption for all sensitive data. Access is strictly governed by the principle of least privilege, ensuring only necessary personnel interact with your environment.</p>
-                <div class="zero-leak-box">
-                    <div>
-                        <h3 class="zl-title">Zero-Leak Philosophy</h3>
-                        <p class="zl-desc">Our internal protocols exceed GDPR and CCPA standards for digital safety.</p>
-                    </div>
-                    <span class="material-icons-outlined zl-icon">verified_user</span>
-                </div>
-            </div>
-        </div>
+        <!-- Section 3: Use -->
+        <article class="priv-content-block">
+            <span class="p-sec-num">03. UTILIZATION</span>
+            <h2 class="p-sec-title">Use of Information</h2>
+            <p class="p-sec-text">Your information is used solely to provide and improve our services. We do not sell your personal data to third parties. Our usage patterns focus on service execution, threat mitigation, and structural optimization of our platform.</p>
+        </article>
 
-        <!-- Section 4 -->
-        <div class="priv-grid">
-            <div class="priv-num">04. Rights</div>
-            <div>
-                <h2 class="priv-sec-title">Your Control</h2>
-                <p class="priv-text">As the owner of your data, you possess the right to access, rectify, or request the deletion of your personal information at any time through our support portal.</p>
-                <div class="rights-list">
-                    <div class="right-item">
-                        <div class="ri-icon-wrap">
-                            <span class="material-icons-outlined">vpn_key</span>
-                        </div>
-                        <div>
-                            <h3 class="ri-title">Right to Access</h3>
-                            <p class="ri-desc">Request a complete copy of all stored data associated with your profile.</p>
-                        </div>
-                    </div>
-                    <div class="right-item">
-                        <div class="ri-icon-wrap">
-                            <span class="material-icons-outlined">edit</span>
-                        </div>
-                        <div>
-                            <h3 class="ri-title">Right to Correction</h3>
-                            <p class="ri-desc">Update outdated or incorrect information in real-time.</p>
-                        </div>
-                    </div>
-                    <div class="right-item">
-                        <div class="ri-icon-wrap">
-                            <span class="material-icons-outlined">delete_outline</span>
-                        </div>
-                        <div>
-                            <h3 class="ri-title">Right to Erasure</h3>
-                            <p class="ri-desc">Request permanent deletion of your account and associated records.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Section 4: Security -->
+        <article class="priv-content-block">
+            <span class="p-sec-num">04. SAFEGUARDING</span>
+            <h2 class="p-sec-title">Security</h2>
+            <p class="p-sec-text">We implement industry-standard security measures, including AES-256 encryption and zero-trust protocols, to protect your data. While we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security.</p>
+        </article>
 
-        <!-- Bottom Banner -->
-        <div class="priv-banner">
-            <h2 class="pb-title">Questions about your privacy?</h2>
-            <p class="pb-desc">Our Data Protection Officer is available to discuss our security protocols in detail.</p>
-            <a href="mailto:privacy@wpmaintenance.com" class="btn-email-white">
+        <!-- CONTACT -->
+        <footer class="priv-contact-box">
+            <h2 class="pc-title">Contact</h2>
+            <p class="pc-desc">For questions regarding these policies, please reach out to our privacy office.</p>
+            <a href="mailto:support@unitedwpagency.com" class="pc-email">
                 <span class="material-icons-outlined">mail</span>
-                privacy@wpmaintenance.com
+                support@unitedwpagency.com
             </a>
-        </div>
+        </footer>
 
     </div>
 </div>

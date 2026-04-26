@@ -26,10 +26,18 @@
             @error('email') <div class="form-error">{{ $message }}</div> @enderror
         </div>
 
+        <div style="margin: 2.5rem 0 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 800; color: var(--cp-dark); display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons-outlined" style="color: var(--cp-primary);">shield</span>
+                Account Security
+            </h3>
+            <p style="font-size: 0.875rem; color: #64748b; margin-top: 4px;">Leave fields blank if you do not wish to change your password.</p>
+        </div>
+
         <div class="grid-2">
             <div class="form-group">
-                <label class="form-label" for="password">New Password (optional)</label>
-                <input type="password" class="form-input" id="password" name="password" minlength="8">
+                <label class="form-label" for="password">New Password</label>
+                <input type="password" class="form-input" id="password" name="password" minlength="8" placeholder="••••••••">
                 @error('password') <div class="form-error">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">

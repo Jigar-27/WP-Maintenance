@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
-@section('title', 'Refund Policy — WP Maintenance')
-@section('meta_description', 'Please read our refund policy carefully. To maintain high transparency and credibility, we outline our terms regarding cancellations and refunds below.')
+@section('title', 'Refund & Cancellation Policy — United WP agency')
+@section('meta_description', 'At United WP agency, we aim to provide our users with clear, honest, and transparent policies regarding the use of our services, including purchases and billing.')
 
 @push('styles')
 <style>
@@ -9,39 +9,38 @@
     .refund-container { max-width: 900px; margin: 0 auto; padding: 4rem 1.5rem; }
 
     /* Header */
-    .refund-hero { text-align: center; margin-bottom: 5rem; }
+    .refund-hero { text-align: center; margin-bottom: 2rem; }
     .refund-hero h1 { font-size: 3.5rem; font-weight: 900; color: #010101; letter-spacing: -0.025em; margin-bottom: 1.5rem; }
     .hero-sub { font-size: 1.125rem; color: #854d0e; line-height: 1.6; max-width: 700px; margin: 0 auto; font-weight: 500; }
 
-    /* No Refund Block */
-    .no-refund-card {
+    /* Policy Sections */
+    .policy-section { margin-bottom: 5rem; }
+    .policy-card {
         background: #ffffff; border: 1px solid #f1f5f9; border-radius: 20px;
         padding: 3.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.02);
-        display: grid; grid-template-columns: 1fr 240px; gap: 3rem; margin-bottom: 5rem; align-items: center;
+        margin-bottom: 2rem;
     }
-    .nr-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
-    .nr-header .material-icons-outlined { color: #1e293b; font-size: 1.75rem; }
-    .nr-header h2 { font-size: 1.75rem; font-weight: 850; color: #010101; margin: 0; }
-    .nr-text { font-size: 0.9375rem; color: #64748b; line-height: 1.8; margin-bottom: 1.5rem; }
-    .nr-text strong { color: #854d0e; font-weight: 800; }
-    
+    .pc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+    .pc-header .material-icons-outlined { color: #854d0e; font-size: 1.75rem; }
+    .pc-header h2 { font-size: 1.75rem; font-weight: 850; color: #010101; margin: 0; }
+    .pc-text { font-size: 1rem; color: #475569; line-height: 1.8; margin-bottom: 1.5rem; }
+    .pc-text strong { color: #0f172a; font-weight: 800; }
+
+    /* No Refund Highlight */
+    .no-refund-grid { display: grid; grid-template-columns: 1fr 240px; gap: 3rem; align-items: center; }
     .final-badge-card {
-        background: #0f172a; border-radius: 16px; padding: 2.5rem; text-align: center; color: white;
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+        background: #8c2f1b; border-radius: 16px; padding: 2.5rem; text-align: center; color: white;
+        box-shadow: 0 20px 40px rgba(140, 47, 27, 0.2);
     }
     .final-badge-card .material-icons-outlined { font-size: 2.5rem; margin-bottom: 1.25rem; }
     .final-badge-card .badge-text { font-size: 1rem; font-weight: 850; letter-spacing: 0.1em; line-height: 1.4; display: block; }
 
-    /* Terms & Transparency Section */
-    .transparency-layout { display: grid; grid-template-columns: 320px 1fr; gap: 4rem; margin-bottom: 6rem; }
-    .tl-left h2 { font-size: 1.75rem; font-weight: 900; color: #010101; margin-bottom: 1.5rem; }
-    .tl-left p { font-size: 0.9375rem; color: #64748b; line-height: 1.75; }
-
-    .tl-right { display: flex; flex-direction: column; gap: 1.25rem; }
-    .trans-card { background: #f8fbff; border-radius: 16px; padding: 2rem 2.5rem; display: flex; align-items: flex-start; gap: 1.5rem; }
-    .tc-number { font-size: 1.125rem; font-weight: 900; color: #0f172a; flex-shrink: 0; padding-top: 2px; }
-    .tc-content h3 { font-size: 1.0625rem; font-weight: 850; color: #010101; margin-bottom: 0.75rem; }
-    .tc-content p { font-size: 0.875rem; color: #64748b; line-height: 1.7; margin: 0; }
+    /* Grid Layout for secondary points */
+    .secondary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 3rem; }
+    .sec-card { background: #f8fbff; border-radius: 16px; padding: 2.5rem; border: 1px solid #edf2f7; }
+    .sec-card h3 { font-size: 1.25rem; font-weight: 850; color: #010101; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+    .sec-card h3 .material-icons-outlined { color: #854d0e; }
+    .sec-card p { font-size: 0.9375rem; color: #64748b; line-height: 1.7; margin: 0; }
 
     /* Footer Banner */
     .billing-footer-banner {
@@ -65,7 +64,7 @@
     .btn-bf-outline:hover { background: rgba(255,255,255,0.05); }
 
     @media (max-width: 992px) {
-        .no-refund-card, .transparency-layout, .billing-footer-banner { grid-template-columns: 1fr; gap: 3rem; }
+        .no-refund-grid, .secondary-grid, .billing-footer-banner { grid-template-columns: 1fr; gap: 3rem; }
         .refund-hero h1 { font-size: 2.75rem; }
         .bf-actions { flex-direction: column; width: 100%; }
         .btn-bf-white, .btn-bf-outline { width: 100%; text-align: center; }
@@ -78,71 +77,56 @@
     <div class="refund-container">
         {{-- Hero Header --}}
         <header class="refund-hero" data-animate>
-            <h1>Refund Policy</h1>
-            <p class="hero-sub">Please read our refund policy carefully. To maintain high transparency and credibility, we outline our terms regarding cancellations and refunds below.</p>
+            <h1>Refund & Cancellation Policy</h1>
+            <p class="hero-sub">At United WP agency, we aim to provide our users with clear, honest, and transparent policies regarding the use of our services, including purchases and billing. Please read the following carefully before proceeding with any transactions on our website.</p>
         </header>
 
         {{-- No Refund Policy Block --}}
-        <section class="no-refund-card" data-animate>
-            <div class="nr-left">
-                <div class="nr-header">
+        <section class="policy-card no-refund-grid" data-animate>
+            <div class="pc-left">
+                <div class="pc-header">
                     <span class="material-icons-outlined">gavel</span>
                     <h2>No Refund Policy</h2>
                 </div>
-                <p class="nr-text">At WP Maintenance, we are committed to providing immediate and high-quality WordPress engineering work. Because our services involve significant labor and technical resources allocated the moment you subscribe, <strong>all sales are final and non-refundable.</strong></p>
-                <p class="nr-text" style="margin-bottom: 0;">By purchasing our services, you acknowledge and agree that no refunds will be issued for any reason, including but not limited to dissatisfaction with the service or early termination of the subscription cycle.</p>
+                <p class="pc-text">Due to the nature of our services—digital delivery of website development, maintenance, customization, and related solutions—we do not offer refunds once a transaction is completed. This policy applies to all subscription plans, one-time services, and other paid offerings available on the platform.</p>
+                <p class="pc-text">When you make a purchase or initiate a service, resources are allocated, and work may begin immediately. Because of this commitment and the inherent nature of digital and service-based offerings, <strong>all sales are final.</strong></p>
+                <p class="pc-text" style="font-size: 0.875rem; font-style: italic; color: #94a3b8;">We strongly recommend that users review service details carefully and contact our support team for any pre-purchase clarifications to ensure the services meet their specific requirements.</p>
             </div>
-            <div class="nr-right">
+            <div class="pc-right">
                 <div class="final-badge-card">
-                    <span class="material-icons-outlined">lock</span>
-                    <span class="badge-text">ALL SALES <br> ARE FINAL</span>
+                    <span class="material-icons-outlined">verified</span>
+                    <span class="badge-text">DIGITAL SERVICE <br> FINAL SALE</span>
                 </div>
             </div>
         </section>
 
-        {{-- Terms & Transparency Layout --}}
-        <div class="transparency-layout" data-animate>
-            <aside class="tl-left">
-                <h2>Terms & <br> Transparency</h2>
-                <p>Our commitment to excellence means we start working on your site immediately. These terms ensure we can maintain our high standard of service for all clients.</p>
-            </aside>
-            <div class="tl-right">
-                {{-- Point 01 --}}
-                <div class="trans-card">
-                    <span class="tc-number">01</span>
-                    <div class="tc-content">
-                        <h3>Immediate Value Delivery</h3>
-                        <p>Access to our security monitoring tools, performance audits, and engineer time begins instantly upon subscription, representing immediate value that cannot be returned.</p>
-                    </div>
-                </div>
-                {{-- Point 02 --}}
-                <div class="trans-card">
-                    <span class="tc-number">02</span>
-                    <div class="tc-content">
-                        <h3>Cancellation Policy</h3>
-                        <p>You may cancel your subscription at any time to prevent future billing. However, no prorated refunds will be issued for the remaining duration of your current billing period.</p>
-                    </div>
-                </div>
-                {{-- Point 03 --}}
-                <div class="trans-card">
-                    <span class="tc-number">03</span>
-                    <div class="tc-content">
-                        <h3>Service Continuity</h3>
-                        <p>Upon cancellation, you will continue to have full access to our maintenance services until the end of your prepaid billing cycle.</p>
-                    </div>
-                </div>
+        {{-- Cancellation & Disputes Grid --}}
+        <div class="secondary-grid" data-animate>
+            {{-- Cancellation --}}
+            <div class="sec-card">
+                <h3><span class="material-icons-outlined">cancel</span> Cancellation</h3>
+                <p>If you are on a recurring subscription plan, you may cancel your subscription at any time before the next billing cycle. Cancellation will prevent future charges, and you will continue to have access to the service until the end of your current billing period.</p>
+                <p style="margin-top: 1rem; font-weight: 700; color: #010101; font-size: 0.875rem;">No partial refunds will be provided for unused time within an active subscription.</p>
+                <p style="margin-top: 1rem; font-size: 0.8125rem;">To cancel, please email <strong>support@unitedwpagency.com</strong> before renewal.</p>
+            </div>
+
+            {{-- Dispute Resolution --}}
+            <div class="sec-card">
+                <h3><span class="material-icons-outlined">help_outline</span> Dispute Resolution</h3>
+                <p>In the event of a billing dispute or technical issue, we encourage you to contact our support team immediately. While we maintain a strict no-refund policy, we are committed to reviewing and resolving concerns fairly and promptly where applicable.</p>
+                <p style="margin-top: 1rem; font-size: 0.8125rem;">Your trust and satisfaction are important to us. We aim for resolution through open communication.</p>
             </div>
         </div>
 
         {{-- Footer Trust Banner --}}
         <footer class="billing-footer-banner" data-animate>
             <div class="bf-content">
-                <h2>Have questions about your billing?</h2>
-                <p>Our dedicated support team is available to help clarify any billing terms or subscription concerns.</p>
+                <h2>Still have questions?</h2>
+                <p>Thank you for choosing United WP agency. If you have any questions about this policy, please contact us at support@unitedwpagency.com.</p>
             </div>
             <div class="bf-actions">
-                <a href="{{ route('contact') }}" class="btn-bf-white">Contact Support</a>
-                <a href="{{ route('faq') }}" class="btn-bf-outline">Read FAQs</a>
+                <a href="mailto:support@unitedwpagency.com" class="btn-bf-white">Email Support</a>
+                <a href="{{ route('contact') }}" class="btn-bf-outline">Contact Page</a>
             </div>
         </footer>
     </div>

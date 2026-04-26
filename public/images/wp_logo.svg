@@ -1,0 +1,12 @@
+<svg width="400" height="480" viewBox="0 0 400 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Orange Part -->
+  <path d="M73.4 97.5V114.3H116.3V97.5H73.4Z" fill="#EA580C"/>
+  <path d="M72.9 146C73 139.7 73.1 133.4 73.4 127.1L101.4 127.3L101 146.4H129.4L130 127.5L157.9 127.8C157.6 134 157.3 140.2 157.1 146.4V216.7C157.1 234.3 142.1 249.2 124.5 249.2V277.6C156.4 277.6 182.2 251.7 182.2 219.7V146.4H210.6V127.5H182.2V65.8L72.9 146Z" fill="#EA580C"/>
+  
+  <!-- Blue Part -->
+  <path d="M227 151V233L258 290L289 233L320 290L351 233V65.8L210.6 127.5L227 151Z" fill="#0F172A"/>
+  <path d="M351 127.5H380V226C380 306 200 376 200 376C200 376 34.6 312 20 248V214H48.4V248C63 312 200 347.6 200 347.6C200 347.6 351.6 312.4 351 248.4V127.5Z" fill="#0F172A"/>
+
+  <!-- Logo Text -->
+  <text x="50%" y="430" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="42" fill="#0F172A">United WP agency</text>
+</svg>

@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Subscription;
 use App\Models\Invoice;
 use App\Models\Plan;
+use App\Models\PlanFeature;
 use App\Models\ReminderLog;
 use App\Models\User;
 use App\Mail\SubscriptionReminder;
@@ -18,6 +19,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Throwable;
+
+
 
 class AdminController extends Controller
 {
@@ -371,7 +374,8 @@ class AdminController extends Controller
                     'Client Email',
                     'Domain',
                     'Plan',
-                    'Monthly Price',
+                    'Annual Price',
+
                     'Status',
                     'Payment Status',
                     'Start Date',
@@ -494,10 +498,8 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'best_for' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
-            'quarterly_discount' => 'nullable|numeric|min:0|max:100',
-            'yearly_discount' => 'nullable|numeric|min:0|max:100',
-            'billing_cycle' => 'required|in:monthly,quarterly,yearly',
             'dev_hours' => 'nullable|integer|min:0',
+
             'features' => 'nullable|string',
             'sort_order' => 'nullable|integer|min:0',
             'is_popular' => 'nullable|boolean',
@@ -516,10 +518,8 @@ class AdminController extends Controller
             'description' => $validated['description'] ?? null,
             'best_for' => $validated['best_for'] ?? null,
             'price' => $validated['price'],
-            'quarterly_discount' => $validated['quarterly_discount'] ?? 10,
-            'yearly_discount' => $validated['yearly_discount'] ?? 20,
-            'billing_cycle' => $validated['billing_cycle'],
             'dev_hours' => $validated['dev_hours'] ?? 0,
+
             'features' => $features,
             'sort_order' => $validated['sort_order'] ?? 0,
             'is_popular' => (bool) ($validated['is_popular'] ?? false),
@@ -813,4 +813,66 @@ class AdminController extends Controller
 
         return redirect()->route('admin.profile.edit')->with('success', 'Profile updated successfully.');
     }
+    public function plans()
+    {
+        $plans = Plan::orderBy('sort_order')->get();
+        $features = PlanFeature::orderBy('sort_order')->get();
+        return view('admin.plans', compact('plans', 'features'));
+    }
+
+    public function planFeatureStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'startup' => 'nullable|boolean',
+            'scaleup' => 'nullable|boolean',
+            'enterprise' => 'nullable|boolean',
+            'sort_order' => 'integer',
+        ]);
+
+        PlanFeature::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'startup' => $request->has('startup'),
+            'scaleup' => $request->has('scaleup'),
+            'enterprise' => $request->has('enterprise'),
+            'sort_order' => $validated['sort_order'] ?? 0,
+        ]);
+
+        return redirect()->route('admin.plans')->with('success', 'Feature created successfully.');
+    }
+
+    public function planFeatureUpdate(Request $request, $id)
+    {
+        $feature = PlanFeature::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'sort_order' => 'integer',
+        ]);
+
+        $feature->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'startup' => $request->has('startup'),
+            'scaleup' => $request->has('scaleup'),
+            'enterprise' => $request->has('enterprise'),
+            'sort_order' => $validated['sort_order'] ?? 0,
+        ]);
+
+        return redirect()->route('admin.plans')->with('success', 'Feature updated successfully.');
+    }
+
+    public function planFeatureDelete($id)
+
+    {
+        $feature = PlanFeature::findOrFail($id);
+        $feature->delete();
+
+        return redirect()->route('admin.plans')->with('success', 'Feature deleted successfully.');
+    }
 }
+
+

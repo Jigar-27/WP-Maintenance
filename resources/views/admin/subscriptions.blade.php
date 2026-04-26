@@ -338,7 +338,8 @@
                     <th>CLIENT & ID</th>
                     <th>DOMAIN</th>
                     <th>PLAN TIER</th>
-                    <th>MONTHLY PRICE</th>
+                    <th>ANNUAL PRICE</th>
+
                     <th>STATUS</th>
                 </tr>
             </thead>

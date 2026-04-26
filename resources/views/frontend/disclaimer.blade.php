@@ -1,5 +1,5 @@
 @extends('layouts.frontend')
-@section('title', 'Disclaimer')
+@section('title', 'Disclaimer — United WP agency')
 
 @push('styles')
 <style>
@@ -49,7 +49,7 @@
     margin: 0;
 }
 
-/* Card 1: Assumption of Risk */
+/* Card: General Notice */
 .risk-card {
     background-color: #1e293b;
     border-radius: 12px;
@@ -57,7 +57,7 @@
     display: flex;
     gap: 1.5rem;
     color: white;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 }
 @media (max-width: 640px) {
     .risk-card { flex-direction: column; }
@@ -94,7 +94,7 @@
     display: grid;
     grid-template-columns: 240px 1fr;
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
 }
 @media (max-width: 768px) {
     .disc-row { grid-template-columns: 1fr; gap: 1rem; }
@@ -110,7 +110,7 @@
 .dr-line {
     width: 20px;
     height: 3px;
-    background-color: #2563eb;
+    background-color: #ea580c;
     border-radius: 2px;
 }
 .dr-title {
@@ -122,48 +122,7 @@
 .dr-text {
     font-size: 0.9375rem;
     color: #475569;
-    line-height: 1.7;
-    margin: 0;
-}
-.dr-text-italic {
-    font-style: italic;
-}
-
-/* Two Feature Cards */
-.feat-cards-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin: 4rem 0;
-}
-@media (max-width: 640px) {
-    .feat-cards-grid { grid-template-columns: 1fr; }
-}
-.fc-card {
-    background-color: #f8fafc;
-    border-radius: 12px;
-    padding: 2rem;
-}
-.fc-title-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-.fc-icon {
-    color: #2563eb;
-    font-size: 20px;
-}
-.fc-title {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-}
-.fc-text {
-    font-size: 0.8125rem;
-    color: #64748b;
-    line-height: 1.6;
+    line-height: 1.8;
     margin: 0;
 }
 
@@ -219,68 +178,51 @@
         <div class="disc-header">
             <div class="disc-badge">Legal Documentation</div>
             <h1 class="disc-title">Disclaimer</h1>
-            <p class="disc-desc">Last updated: October 24, 2023. Please read this legal disclaimer carefully before using the services provided by WP Maintenance.</p>
+            <p class="disc-desc">Last updated: April 19, 2026. This document outlines the limitations of liability and the terms of information usage for our services and digital assets.</p>
         </div>
 
-        <!-- Assumption of Risk Card -->
+        <!-- Section 1: Accuracy -->
         <div class="risk-card">
             <div class="risk-icon-wrap">
-                <span class="material-icons-outlined">warning</span>
+                <span class="material-icons-outlined">info</span>
             </div>
             <div class="risk-content">
-                <h2 class="rc-title">Assumption of Risk</h2>
-                <p class="rc-text">Use of WP Maintenance services involves inherent risks associated with digital infrastructure, including but not limited to server downtime, software incompatibilities, and data vulnerability. By engaging our services, you acknowledge and assume full responsibility for the regular backup of your data and the ultimate security of your digital assets.</p>
+                <h2 class="rc-title">1. Accuracy of Information</h2>
+                <p class="rc-text">The content provided is for general informational purposes only. While we endeavor to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.</p>
             </div>
         </div>
 
-        <!-- General Information -->
+        <!-- Section 2: No Professional Advice -->
         <div class="disc-row">
             <div class="dr-left">
                 <div class="dr-line"></div>
-                <h2 class="dr-title">General Information</h2>
+                <h2 class="dr-title">2. No Professional Advice</h2>
             </div>
             <div>
-                <p class="dr-text">The information provided by WP Maintenance ("we," "us," or "our") on our website and through our service is for general informational purposes only. All information is provided in good faith, however, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information on the site or our service platforms.</p>
+                <p class="dr-text">The information contained on this platform is not intended to be a substitute for professional cybersecurity, legal, or financial advice. All software and hardware security configurations should be reviewed by qualified personnel specifically trained for your organization’s unique environment.</p>
             </div>
         </div>
 
-        <!-- Two Feature Cards -->
-        <div class="feat-cards-grid">
-            <div class="fc-card">
-                <div class="fc-title-wrap">
-                    <span class="material-icons-outlined fc-icon">gpp_maybe</span>
-                    <h3 class="fc-title">Service Limitations</h3>
-                </div>
-                <p class="fc-text">WP Maintenance provides technical support and maintenance for WordPress installations. We do not guarantee that our services will resolve all technical issues or that your website will be 100% secure from all cyber threats. Security is a continuous process, not a final destination.</p>
-            </div>
-            <div class="fc-card">
-                <div class="fc-title-wrap">
-                    <span class="material-icons-outlined fc-icon">stars</span>
-                    <h3 class="fc-title">Professional Advice</h3>
-                </div>
-                <p class="fc-text">Our services do not constitute legal, financial, or professional security advice. Users should consult with appropriate professionals before making decisions based on technical data or security reports provided through our maintenance dashboard.</p>
-            </div>
-        </div>
-
-        <!-- Third-Party Links -->
+        <!-- Section 3: Limitation of Liability -->
         <div class="disc-row">
             <div class="dr-left">
                 <div class="dr-line"></div>
-                <h2 class="dr-title">Third-Party Links</h2>
+                <h2 class="dr-title">3. Limitation of Liability</h2>
             </div>
             <div>
-                <p class="dr-text">Our service may contain links to third-party websites or services that are not owned or controlled by WP Maintenance. We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party web sites or services. You further acknowledge and agree that WP Maintenance shall not be responsible or liable, directly or indirectly, for any damage or loss caused.</p>
+                <p class="dr-text">In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of this website.</p>
+                <p class="dr-text" style="margin-top: 1.5rem;">Through this website, you are able to link to other websites which are not under our control. We have no control over the nature, content, and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them.</p>
             </div>
         </div>
 
-        <!-- No Warranties -->
+        <!-- Section 4: External Links -->
         <div class="disc-row" style="margin-bottom: 0;">
             <div class="dr-left">
                 <div class="dr-line"></div>
-                <h2 class="dr-title">No Warranties</h2>
+                <h2 class="dr-title">4. External Links Disclaimer</h2>
             </div>
             <div>
-                <p class="dr-text dr-text-italic">The service is provided on an "AS IS" and "AS AVAILABLE" basis. The service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement or course of performance.</p>
+                <p class="dr-text">Our service may contain links to external websites that are not provided or maintained by or in any way affiliated with us. Please note that we do not guarantee the accuracy, relevance, timeliness, or completeness of any information on these external websites.</p>
             </div>
         </div>
 
@@ -288,12 +230,12 @@
         <div class="disc-banner">
             <div class="db-left">
                 <h2 class="db-title">Questions about this disclaimer?</h2>
-                <p class="db-desc">Our legal team is available to clarify any points of concern.</p>
+                <p class="db-desc">Contact our support team at support@unitedwpagency.com</p>
             </div>
             <div class="db-right">
-                <a href="mailto:legal@wpmaintenance.com">
-                    legal@wpmaintenance.com
-                    <span class="material-icons-outlined">open_in_new</span>
+                <a href="mailto:support@unitedwpagency.com">
+                    Email Support
+                    <span class="material-icons-outlined">mail</span>
                 </a>
             </div>
         </div>

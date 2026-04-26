@@ -6,14 +6,12 @@
     <meta name="description" content="@yield('meta_description', 'Premium WordPress maintenance and concierge service. Enterprise-grade security, backups, and performance optimization for your WordPress sites.')">
     <title>@yield('title', 'WP Maintenance') — Premium WordPress Concierge</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23FF5722'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Inter,sans-serif' font-weight='800' font-size='18'>W</text></svg>">
-    
-    {{-- Level 6: Native View Transitions (SPA Morphing) --}}
-    <meta name="view-transition" content="same-origin">
-    
-    {{-- Level 6: Lenis Smooth Scroll Library --}}
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/wp_logo.svg') }}">
 
+
+
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
     @stack('styles')
 </head>
     <style>
@@ -25,44 +23,45 @@
         }
         body { font-family: 'Inter', sans-serif; background: #ffffff; color: #334155; margin: 0; }
         
-        /* Native View Transition Keyframes */
-        @keyframes fade-in { from { opacity: 0; } }
-        @keyframes fade-out { to { opacity: 0; } }
-        @keyframes slide-from-right { from { transform: translateX(30px); } }
-        @keyframes slide-to-left { to { transform: translateX(-30px); } }
-        ::view-transition-old(root) { animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left; }
-        ::view-transition-new(root) { animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right; }
-        
-        /* Lenis Required Styling */
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-        .lenis.lenis-scrolling iframe { pointer-events: none; }
-
         .fp-container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
         
         /* Navbar */
         .fp-nav {
-            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: #ffffff;
             border-bottom: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+        .fp-nav.scrolled {
+            padding: 0.75rem 0;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
         .fp-brand {
-            display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.25rem; color: var(--fp-dark); text-decoration: none;
+            display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.125rem; color: var(--fp-dark); text-decoration: none;
+            letter-spacing: -0.02em; text-transform: uppercase;
         }
-        .fp-brand-icon {
-            width: 32px; height: 32px; background: var(--fp-dark); color: white; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
+        .fp-brand-img {
+            height: 48px; width: auto; display: block;
+            transition: transform 0.2s ease;
         }
+        .fp-brand:hover .fp-brand-img {
+            transform: translateY(-1px) scale(1.05);
+        }
+
+
+
         
         .fp-nav-links { display: flex; gap: 2.5rem; list-style: none; margin: 0; padding: 0; }
         .fp-nav-links a { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: #64748b; transition: color 0.2s; }
         .fp-nav-links a:hover { color: var(--fp-dark); }
-        .fp-nav-links a.active { color: var(--fp-primary); }
+        /* Removed active highlight to keep menu consistent */
         
         .fp-nav-right { display: flex; align-items: center; gap: 1.5rem; }
         .fp-login-link { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: #64748b; }
@@ -70,10 +69,10 @@
         .fp-btn-trial {
             background: var(--fp-primary); color: white; text-decoration: none;
             padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 700; font-size: 0.9375rem;
-            transition: background 0.2s;
+            box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35);
+            transition: all 0.2s ease;
         }
-        .fp-btn-trial:hover { color: white; background: var(--fp-primary); }
-        /* .fp-btn-trial:hover removed background change to make it static */
+        .fp-btn-trial:hover { color: white; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(234, 88, 12, 0.45); }
 
         /* Footer */
         .fp-footer {
@@ -104,9 +103,11 @@
     <nav class="fp-nav">
         <div class="fp-container" style="display:flex; align-items:center; justify-content:space-between; width:100%; position:relative;">
             <a href="{{ route('home') }}" class="fp-brand">
-                <div class="fp-brand-icon"><span class="material-icons-outlined" style="font-size:18px;">shield</span></div>
-                WP Maintenance
+                <img src="{{ asset('images/wp_logo.svg') }}" alt="United WP agency" class="fp-brand-img">
             </a>
+
+
+
             
             <ul class="fp-nav-links" id="fpNavLinks">
                 <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
@@ -116,7 +117,6 @@
             </ul>
             
             <div class="fp-nav-right">
-                <a href="{{ route('admin.login') }}" class="fp-login-link" style="display:none;">Login</a>
                 <a href="{{ route('plans') }}" class="fp-btn-trial">Get Started</a>
                 <button class="fp-mobile-toggle" id="fpMenuToggle" style="display:none; background:none; border:none; cursor:pointer; padding:4px;" aria-label="Toggle menu">
                     <span class="material-icons-outlined" style="font-size:1.75rem; color:#0f172a;">menu</span>
@@ -134,11 +134,13 @@
             <div class="fp-footer-grid">
                 <div>
                     <div class="fp-footer-brand">
-                        <div class="fp-brand-icon" style="background:white; color:#0f172a;"><span class="material-icons-outlined" style="font-size:18px;">shield</span></div>
-                        WP Maintenance
+                        <img src="{{ asset('images/wp_logo.svg') }}" alt="United WP agency" class="fp-brand-img" style="filter: brightness(0) invert(1); height: 38px;">
                     </div>
-                    <p class="fp-footer-desc">A secure scalable web hosting and plugin service. Priority care and the digital custodian.</p>
+
+                    <p class="fp-footer-desc">Professional WordPress maintenance and security concierge. Your site, our responsibility.</p>
                 </div>
+
+
                 <div>
                     <div class="fp-footer-heading">FAQ</div>
                     <ul class="fp-footer-links">
@@ -152,12 +154,14 @@
                     <ul class="fp-footer-links">
                         <li><a href="{{ route('contact') }}">Get in touch</a></li>
                         <li><a href="{{ route('terms') }}">Terms of Service</a></li>
-                        <li><a href="mailto:contact@wpmaintenance.com">contact@wpmaintenance.com</a></li>
+                        <li><a href="mailto:support@unitedwpagency.com">support@unitedwpagency.com</a></li>
                     </ul>
                 </div>
             </div>
             <div class="fp-footer-bottom">
-                <div><div class="fp-footer-brand" style="margin:0; font-size:1rem;"><div class="fp-brand-icon" style="background:white; color:#0f172a; width:20px; height:20px;"><span class="material-icons-outlined" style="font-size:12px;">shield</span></div> WP Maintenance</div></div>
+                <div><div class="fp-footer-brand" style="margin:0; font-size:0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">United WP agency</div></div>
+
+
                 <div>&copy; 2026 A product by ReUnited Technologies</div>
             </div>
         </div>
@@ -172,6 +176,16 @@
                 fpNav.classList.toggle('fp-nav-open');
             });
         }
+
+        // Handle navbar scroll state
+        const navElement = document.querySelector('.fp-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navElement.classList.add('scrolled');
+            } else {
+                navElement.classList.remove('scrolled');
+            }
+        });
         // Show/hide hamburger button based on screen size
         function updateFpToggle() {
             if (fpToggle) {
@@ -187,24 +201,6 @@
                 link.addEventListener('click', () => fpNav.classList.remove('fp-nav-open'));
             });
         }
-
-        // ── Initialize Lenis Smooth Scroll ──
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-            infinite: false,
-        })
-        function raf(time) {
-            lenis.raf(time)
-            requestAnimationFrame(raf)
-        }
-        requestAnimationFrame(raf)
     </script>
     @stack('scripts')
 </body>
