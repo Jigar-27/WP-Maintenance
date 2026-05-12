@@ -131,7 +131,7 @@
                     <label class="form-label" for="password">Password</label>
                     <input type="password" class="form-input" id="password" name="password" required placeholder="Enter your secure password">
                     <div style="text-align: right; margin-top: 8px;">
-                        <a href="mailto:support@unitedwpagency.com?subject=Password%20Reset%20Request" style="font-size: 0.75rem; color: #64748b; text-decoration: none; font-weight: 600;">Forgot Password?</a>
+                        <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}?subject=Password%20Reset%20Request" style="font-size: 0.75rem; color: #64748b; text-decoration: none; font-weight: 600;">Forgot Password?</a>
                     </div>
                 </div>
                 

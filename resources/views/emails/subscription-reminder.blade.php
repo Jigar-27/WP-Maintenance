@@ -41,7 +41,7 @@
         <p style="font-size:14px;color:#ba1a1a;line-height:1.65;background:#ffdad6;padding:16px;border-radius:8px;margin:16px 0"><strong>Important:</strong> If your subscription is not renewed, all associated data will be removed from our systems.</p>
         @endif
 
-        <p style="font-size:14px;color:#5b4039;line-height:1.65;margin-top:24px">If you have any questions, please contact us at support@wpmaintenance.com.</p>
+        <p style="font-size:14px;color:#5b4039;line-height:1.65;margin-top:24px">If you have any questions, please contact us at {{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}.</p>
         <p style="font-size:14px;color:#5b4039;margin-top:20px">Best regards,<br><strong>WP Maintenance Team</strong></p>
     </td></tr>
     <tr><td style="background:#d5e3fc;padding:24px;text-align:center;font-size:12px;color:#5b4039">

@@ -64,6 +64,14 @@
                         Plans & Features
                     </a>
                 </li>
+                @if(auth()->check() && auth()->user()->isAdmin())
+                <li>
+                    <a href="{{ route('admin.settings') }}" class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                        <span class="material-icons-outlined">settings</span>
+                        Settings
+                    </a>
+                </li>
+                @endif
             </ul>
 
 

@@ -97,7 +97,7 @@
             </div>
 
             <div class="process-steps">
-                <div class="process-line" style="top: 2.25rem;"></div>
+                <div class="process-line"></div>
                 <div class="process-grid">
                     <div class="process-step">
                         <div class="ps-icon"><span class="material-icons-outlined">search</span></div>
@@ -258,9 +258,17 @@
     .ps-icon { 
         width: 48px; height: 48px; background: #f1f5f9; border-radius: 50%; border: 1px solid #e2e8f0;
         display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;
-        color: #64748b; transition: all 0.3s;
+        color: #64748b; transition: all 0.3s; position: relative; z-index: 3;
     }
-    .ps-label { font-size: 0.6875rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .process-step:hover .ps-icon {
+        background: white;
+        border-color: #ea580c;
+        color: #ea580c;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 16px rgba(234, 88, 12, 0.15);
+    }
+    .ps-label { font-size: 0.6875rem; font-weight: 900; color: #1e293b; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.3s; }
+    .process-step:hover .ps-label { color: #ea580c; }
     .ps-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; font-weight: 500; max-width: 160px; margin: 0 auto; }
 
     /* Technical Specs (re-style for consistency) */

@@ -16,14 +16,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Create Primary Administrative Account
-        User::create([
-            'name' => 'United WP Admin',
-            'email' => 'admin@unitedwpagency.com',
-            'password' => Hash::make('password'), // Change this in production
-            'role' => 'admin',
-            'status' => 'active',
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@unitedwpagency.com'],
+            [
+                'name' => 'United WP Admin',
+                'password' => Hash::make('password'), // Change this in production
+                'role' => 'admin',
+                'status' => 'active',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // 2. Clear existing plans and create production tiers
         Plan::truncate();
@@ -91,6 +93,5 @@ class DatabaseSeeder extends Seeder
         foreach ($plans as $plan) {
             Plan::create($plan);
         }
-    }
     }
 }

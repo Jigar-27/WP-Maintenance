@@ -195,9 +195,9 @@
         <footer class="priv-contact-box">
             <h2 class="pc-title">Contact</h2>
             <p class="pc-desc">For questions regarding these policies, please reach out to our privacy office.</p>
-            <a href="mailto:support@unitedwpagency.com" class="pc-email">
+            <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}" class="pc-email">
                 <span class="material-icons-outlined">mail</span>
-                support@unitedwpagency.com
+                {{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}
             </a>
         </footer>
 

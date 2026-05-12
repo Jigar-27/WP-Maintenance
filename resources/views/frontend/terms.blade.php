@@ -126,9 +126,9 @@
                 <footer class="legal-footer">
                     <h2 class="lf-title">Questions about these terms?</h2>
                     <p class="lf-desc">If you have any questions regarding these Terms & Conditions, please contact our support team.</p>
-                    <a href="mailto:support@unitedwpagency.com" class="btn-support">
+                    <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}" class="btn-support">
                         <span class="material-icons-outlined">mail</span>
-                        support@unitedwpagency.com
+                        {{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}
                     </a>
                 </footer>
             </div>

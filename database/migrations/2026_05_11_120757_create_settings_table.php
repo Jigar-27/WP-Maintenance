@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
 
 return new class extends Migration
 {
@@ -12,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Automatically run the seeder after migrations
-        // Artisan::call('db:seed', [
-        //     '--force' => true
-        // ]);
+        Schema::create('settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('key')->unique();
+            $table->text('value')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // No reverse action for seed data in migration
+        Schema::dropIfExists('settings');
     }
 };

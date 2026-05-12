@@ -54,7 +54,7 @@
                     <div class="icon-box email-icon"><span class="material-icons-outlined">mail</span></div>
                     <div class="detail-content">
                         <span class="label-mini">SUPPORT EMAIL</span>
-                        <a href="mailto:support@reunited.tech" class="value-lg">support@reunited.tech</a>
+                        <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}" class="value-lg">{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}</a>
                         <span class="sub-label">24/7 Monitoring for Premium Tier</span>
                     </div>
                 </div>

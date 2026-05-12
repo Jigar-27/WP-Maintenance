@@ -107,7 +107,7 @@
                 <h3><span class="material-icons-outlined">cancel</span> Cancellation</h3>
                 <p>If you are on a recurring subscription plan, you may cancel your subscription at any time before the next billing cycle. Cancellation will prevent future charges, and you will continue to have access to the service until the end of your current billing period.</p>
                 <p style="margin-top: 1rem; font-weight: 700; color: #010101; font-size: 0.875rem;">No partial refunds will be provided for unused time within an active subscription.</p>
-                <p style="margin-top: 1rem; font-size: 0.8125rem;">To cancel, please email <strong>support@unitedwpagency.com</strong> before renewal.</p>
+                <p style="margin-top: 1rem; font-size: 0.8125rem;">To cancel, please email <strong>{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}</strong> before renewal.</p>
             </div>
 
             {{-- Dispute Resolution --}}
@@ -122,10 +122,10 @@
         <footer class="billing-footer-banner" data-animate>
             <div class="bf-content">
                 <h2>Still have questions?</h2>
-                <p>Thank you for choosing United WP agency. If you have any questions about this policy, please contact us at support@unitedwpagency.com.</p>
+                <p>Thank you for choosing United WP agency. If you have any questions about this policy, please contact us at {{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}.</p>
             </div>
             <div class="bf-actions">
-                <a href="mailto:support@unitedwpagency.com" class="btn-bf-white">Email Support</a>
+                <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}" class="btn-bf-white">Email Support</a>
                 <a href="{{ route('contact') }}" class="btn-bf-outline">Contact Page</a>
             </div>
         </footer>

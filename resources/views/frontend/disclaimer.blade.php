@@ -230,10 +230,10 @@
         <div class="disc-banner">
             <div class="db-left">
                 <h2 class="db-title">Questions about this disclaimer?</h2>
-                <p class="db-desc">Contact our support team at support@unitedwpagency.com</p>
+                <p class="db-desc">Contact our support team at {{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}</p>
             </div>
             <div class="db-right">
-                <a href="mailto:support@unitedwpagency.com">
+                <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}">
                     Email Support
                     <span class="material-icons-outlined">mail</span>
                 </a>

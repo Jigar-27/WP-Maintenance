@@ -866,12 +866,28 @@ class AdminController extends Controller
     }
 
     public function planFeatureDelete($id)
-
     {
         $feature = PlanFeature::findOrFail($id);
         $feature->delete();
 
         return redirect()->route('admin.plans')->with('success', 'Feature deleted successfully.');
+    }
+
+    public function settings()
+    {
+        $supportEmail = \App\Models\Setting::get('support_email', 'support@unitedwpagency.com');
+        return view('admin.settings', compact('supportEmail'));
+    }
+
+    public function settingsUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'support_email' => 'required|email|max:255',
+        ]);
+
+        \App\Models\Setting::set('support_email', $validated['support_email']);
+
+        return redirect()->route('admin.settings')->with('success', 'Settings updated successfully.');
     }
 }
 

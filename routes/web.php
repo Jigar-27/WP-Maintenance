@@ -62,6 +62,9 @@ Route::prefix('admin')->group(function () {
             Route::patch('/clients/{id}/activate', [AdminController::class, 'clientActivate'])->name('admin.clients.activate');
             Route::post('/upcoming-dues/{id}/send-reminder', [AdminController::class, 'sendUpcomingDueReminder'])->name('admin.dues.send-reminder');
 
+            Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+            Route::put('/settings', [AdminController::class, 'settingsUpdate'])->name('admin.settings.update');
+
             Route::get('/invoices', [AdminController::class, 'invoices'])->name('admin.invoices');
             Route::get('/invoices/{id}', [AdminController::class, 'invoiceShow'])->name('admin.invoices.show');
         });

@@ -6,7 +6,7 @@
     <meta name="description" content="@yield('meta_description', 'Premium WordPress maintenance and concierge service. Enterprise-grade security, backups, and performance optimization for your WordPress sites.')">
     <title>@yield('title', 'WP Maintenance') — Premium WordPress Concierge</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/wp_logo.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/United agency.png') }}">
 
 
 
@@ -103,7 +103,7 @@
     <nav class="fp-nav">
         <div class="fp-container" style="display:flex; align-items:center; justify-content:space-between; width:100%; position:relative;">
             <a href="{{ route('home') }}" class="fp-brand">
-                <img src="{{ asset('images/wp_logo.svg') }}" alt="United WP agency" class="fp-brand-img">
+                <img src="{{ asset('images/United agency.png') }}" alt="United WP agency" class="fp-brand-img">
             </a>
 
 
@@ -134,7 +134,7 @@
             <div class="fp-footer-grid">
                 <div>
                     <div class="fp-footer-brand">
-                        <img src="{{ asset('images/wp_logo.svg') }}" alt="United WP agency" class="fp-brand-img" style="filter: brightness(0) invert(1); height: 38px;">
+                        <img src="{{ asset('images/United agency.png') }}" alt="United WP agency" class="fp-brand-img" style="height: 38px; border-radius: 4px;">
                     </div>
 
                     <p class="fp-footer-desc">Professional WordPress maintenance and security concierge. Your site, our responsibility.</p>
@@ -154,7 +154,7 @@
                     <ul class="fp-footer-links">
                         <li><a href="{{ route('contact') }}">Get in touch</a></li>
                         <li><a href="{{ route('terms') }}">Terms of Service</a></li>
-                        <li><a href="mailto:support@unitedwpagency.com">support@unitedwpagency.com</a></li>
+                        <li><a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}">{{ \App\Models\Setting::get('support_email', 'support@unitedwpagency.com') }}</a></li>
                     </ul>
                 </div>
             </div>
